@@ -90,8 +90,10 @@ function runneuraltalk2(modelpath, imagepath, imagecount, usegpu) {
 		var match = NEURAL_TALK_2_RESUTL_REGEX.exec(data);
 		if (match) {
 
-			var i = parseInt(match[0]);
-			var caption = match[1];
+			console.log(match);
+
+			var i = parseInt(match[1]);
+			var caption = match[2];
 			i--;
 
 			console.log(i,caption);
