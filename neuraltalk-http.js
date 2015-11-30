@@ -89,7 +89,7 @@ function runneuraltalk2(modelpath, imagepath, imagecount, usegpu) {
 	var proc = spawn("th", args, { cwd: NEURAL_TALK_2_DIR });
 
 	proc.stdout.on('data', function (data) {
-		var match = NEURAL_TALK_2_RESUTL_REGEX.exec(myString);
+		var match = NEURAL_TALK_2_RESUTL_REGEX.exec(data);
 		console.log(match);
 	});
 
