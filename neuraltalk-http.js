@@ -52,7 +52,7 @@ app.post('/upload', multipartMiddleware, function(req, res) {
 
 	base64Data = base64Data.substr(base64Header.length);
 
-	var filepath = QUEUE_DIR + "/" + (new Date()).getTime() "." + ext;
+	var filepath = QUEUE_DIR + "/" + (new Date()).getTime() + "." + ext;
 
 	fs.writeFile(filepath, base64Data, 'base64', function(err) {
 		if (err) res.status(200).send({ success: false });
