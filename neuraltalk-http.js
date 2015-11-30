@@ -18,6 +18,7 @@ var PORT = 80;
 var QUEUE_DIR = './queue';
 
 var NEURAL_TALK_2_DIR = '../neuraltalk2';
+var NEURAL_TALK_2_DIR_BACK = '../neuraltalk-http/';
 var NEURAL_TALK_2_MODEL_FILE = 'model_id1-501-1448236541.t7_cpu.t7';
 var NEURAL_TALK_2_USE_GPU = false;
 
@@ -78,7 +79,7 @@ function runneuraltalk2(modelpath, imagepath, imagecount, usegpu) {
 	var gpuarg = [];
 	if (!usegpu) gpuarg = ['-gpuid', '-1'];
 
-	var args = ['eval.lua', '-model', modelpath, '-image_folder', imagepath, '-num_images', imagecount];
+	var args = ['eval.lua', '-model', modelpath, '-image_folder', NEURAL_TALK_2_DIR_BACK + imagepath, '-num_images', imagecount];
 	for (g in gpuarg)
 		args.push(gpuarg[g]);
 
