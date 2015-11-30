@@ -1,0 +1,31 @@
+{
+  "name": "neuraltalk-http",
+  "version": "1.0.0",
+  "author": "José Augusto Paiva (zepspaiva@gmail.com)"
+  "description": "",
+  "main": "neuraltalk-http.js",
+  "dependencies": {
+    "body-parser": "^1.14.1",
+    "cookie-parser": "^1.4.0",
+    "connect-multiparty": "^2.0.0",
+    "express": "^4.13.3",
+    "express-session": "^1.12.1",
+    "swig": "^1.4.2",
+    "connect-flash": "^0.1.1",
+    "morgan": "^1.6.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zepspaiva/neuraltalk-http.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/zepspaiva/neuraltalk-http/issues"
+  },
+  "homepage": "https://github.com/zepspaiva/neuraltalk-http#readme"
+}

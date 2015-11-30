@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en-us">
+	<head>
+		<meta charset="utf-8">
+		<title>simphony</title>
+		<meta name="description" content="">
+		<meta name="author" content="">
+		
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<link rel="stylesheet" type="text/css" media="screen" href="css/bootstrap.min.css">
+		<link rel="stylesheet" type="text/css" media="screen" href="css/font-awesome.min.css">
+
+		<link rel="stylesheet" type="text/css" media="screen" href="css/smartadmin-production-plugins.min.css">
+		<link rel="stylesheet" type="text/css" media="screen" href="css/smartadmin-production.min.css">
+		<link rel="stylesheet" type="text/css" media="screen" href="css/smartadmin-skins.min.css">
+
+		<link rel="stylesheet" type="text/css" media="screen" href="css/simphony.css">
+
+		<link rel="shortcut icon" href="img/favicon/favicon.ico" type="image/x-icon">
+		<link rel="icon" href="img/favicon/favicon.ico" type="image/x-icon">
+
+		<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,300,400,700">
+
+		<link rel="apple-touch-icon" href="img/splash/sptouch-icon-iphone.png">
+		<link rel="apple-touch-icon" sizes="76x76" href="img/splash/touch-icon-ipad.png">
+		<link rel="apple-touch-icon" sizes="120x120" href="img/splash/touch-icon-iphone-retina.png">
+		<link rel="apple-touch-icon" sizes="152x152" href="img/splash/touch-icon-ipad-retina.png">
+
+		<!-- iOS web-app metas : hides Safari UI Components and Changes Status Bar Appearance -->
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<!-- Startup image for web apps -->
+		<link rel="apple-touch-startup-image" href="img/splash/ipad-landscape.png" media="screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:landscape)">
+		<link rel="apple-touch-startup-image" href="img/splash/ipad-portrait.png" media="screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:portrait)">
+		<link rel="apple-touch-startup-image" href="img/splash/iphone.png" media="screen and (max-device-width: 320px)">
+
+	</head>
+
+	<body class="smart-style-2">
+
+		<!--
+
+		<header id="header">
+
+			<div id="logo-group">
+				<h1>simphony</h1>
+			</div>
+
+			<div class="pull-right hidden" id="status">
+				<div class="ajax-loading-animation color-txt-white"><i class="fa fa-cog fa-spin"></i> Processando novos arquivos...</div>
+			</div>
+
+		</header>
+
+		-->
+
+		<div id="main" role="main" style="margin-left: 10px; margin-top: 10px;"> <!-- margin-left 5 when no menu -->
+
+			<div id="content">
+
+            	<div class="uploadButtonD">
+                    <button class="composeOptionButton rc-Button x-icon" type="button" data-reactid=".4">
+
+                    	<div id="selectPhoto">
+                    		<p><i class="fa fa-camera"></i></p><p class="optionButtonText" data-reactid=".4.0:2">Adicionar foto</span><span data-reactid=".4.1"></p>
+                    		<input type="file" id="file" class="upload" accept="image/*" data-reactid=".4.0:1">
+                    	</div>
+
+                    	<div id="sendingPhoto" class="hidden">
+                    		<p><i class="fa fa-cog fa-spin"></i></p><p class="optionButtonText" data-reactid=".4.0:2">Enviando...</span><span data-reactid=".4.1"></p>
+                    	</div>
+
+                    	<div id="sentPhoto" class="hidden">
+                    		<p><i class="fa fa-check"></i></p><p class="optionButtonText" data-reactid=".4.0:2">Enviada!</span><span data-reactid=".4.1"></p>
+                    		<input type="file" id="file" class="upload" accept="image/*" data-reactid=".4.0:1">
+                    	</div>
+
+                    	<div id="errorPhoto" class="hidden">
+                    		<p><i class="fa fa-disabled"></i></p><p class="optionButtonText" data-reactid=".4.0:2">Erro!</span><span data-reactid=".4.1"></p>
+                    		<input type="file" id="file" class="upload" accept="image/*" data-reactid=".4.0:1">
+                    	</div>
+
+                    </button>
+                </div>
+
+			</div>
+
+		</div>
+
+		<!--================================================== -->
+
+		<!-- PACE LOADER - turn this on if you want ajax loading to show (caution: uses lots of memory on iDevices)-->
+		<script data-pace-options='{ "restartOnRequestAfter": true }' src="js/plugin/pace/pace.min.js"></script>
+
+		<!-- Link to Google CDN's jQuery + jQueryUI; fall back to local -->
+		<script src="js/libs/jquery-2.1.1.min.js"></script>
+		<script src="js/libs/jquery-ui-1.10.3.min.js"></script>
+
+		<!-- IMPORTANT: APP CONFIG -->
+		<script src="js/app.config.js"></script>
+
+		<!-- JS TOUCH : include this plugin for mobile drag / drop touch events-->
+		<script src="js/plugin/jquery-touch/jquery.ui.touch-punch.min.js"></script> 
+
+		<!-- BOOTSTRAP JS -->
+		<script src="js/bootstrap/bootstrap.min.js"></script>
+
+		<!-- CUSTOM NOTIFICATION -->
+		<script src="js/notification/SmartNotification.min.js"></script>
+
+		<!-- JARVIS WIDGETS -->
+		<script src="js/smartwidgets/jarvis.widget.min.js"></script>
+
+		<!-- EASY PIE CHARTS -->
+		<script src="js/plugin/easy-pie-chart/jquery.easy-pie-chart.min.js"></script>
+
+		<!-- SPARKLINES -->
+		<script src="js/plugin/sparkline/jquery.sparkline.min.js"></script>
+
+		<!-- JQUERY VALIDATE -->
+		<script src="js/plugin/jquery-validate/jquery.validate.min.js"></script>
+
+		<!-- JQUERY MASKED INPUT -->
+		<script src="js/plugin/masked-input/jquery.maskedinput.min.js"></script>
+
+		<!-- JQUERY SELECT2 INPUT -->
+		<script src="js/plugin/select2/select2.min.js"></script>
+
+		<!-- JQUERY UI + Bootstrap Slider -->
+		<script src="js/plugin/bootstrap-slider/bootstrap-slider.min.js"></script>
+
+		<!-- browser msie issue fix -->
+		<script src="js/plugin/msie-fix/jquery.mb.browser.min.js"></script>
+
+		<!-- FastClick: For mobile devices -->
+		<script src="js/plugin/fastclick/fastclick.min.js"></script>
+
+		<script src="js/app.min.js"></script>
+
+		<script src="js/plugin/jqgrid/jquery.jqGrid.min.js"></script>
+		<script src="js/plugin/jqgrid/jQuery.jqGrid.setColWidth.js"></script>
+		<script src="js/plugin/jqgrid/grid.locale-en.min.js"></script>
+
+		<script type="text/javascript">
+
+			$(document).ready(function() {
+
+				pageSetUp();
+
+				function isUploadSupported() {
+				    if (navigator.userAgent.match(/(Android (1.0|1.1|1.5|1.6|2.0|2.1))|(Windows Phone (OS 7|8.0))|(XBLWP)|(ZuneWP)|(w(eb)?OSBrowser)|(webOS)|(Kindle\/(1.0|2.0|2.5|3.0))/)) {
+				        return false;
+				    }
+				    var elem = document.createElement('input');
+				    elem.type = 'file';
+				    return !elem.disabled;
+				};
+
+				if (window.File && window.FileReader && window.FormData && isUploadSupported()) {
+					
+					$('input[type=file]').on('change', function (e) {
+						var file = e.target.files[0];
+
+						if (file) {
+							if (/^image\//i.test(file.type)) {
+								readFile(file);
+							} else {
+								showStatus("error", "Not a valid image!");
+							}
+						}
+					});
+
+				} else {
+					showStatus("error", "File upload is not supported!");
+				}
+
+			});
+
+			function showStatus(status, message) {
+
+				if (status == "select") {
+					$('#selectPhoto').removeClass('hidden')
+					$('#sendingPhoto').addClass('hidden')
+					$('#sentPhoto').addClass('hidden')
+					$('#errorPhoto').addClass('hidden')
+				} else if (status == "sending") {
+					$('#selectPhoto').addClass('hidden')
+					$('#sendingPhoto').removeClass('hidden')
+					$('#sentPhoto').addClass('hidden')
+					$('#errorPhoto').addClass('hidden')
+				} else if (status == "sent") {
+					$('#selectPhoto').addClass('hidden')
+					$('#sendingPhoto').addClass('hidden')
+					$('#sentPhoto').removeClass('hidden')
+					$('#errorPhoto').addClass('hidden')
+				} else if (status == "error") {
+					$('#selectPhoto').addClass('hidden')
+					$('#sendingPhoto').addClass('hidden')
+					$('#sentPhoto').addClass('hidden')
+					$('#errorPhoto').removeClass('hidden')
+				}
+
+			}
+
+			function readFile(file) {
+
+				showStatus("sending", "Enviando...");
+
+				var reader = new FileReader();
+
+				reader.onloadend = function () {
+					processFile(reader.result, file.type);
+				}
+
+				reader.onerror = function () {
+					showStatus("error", "There was an error reading the file!");
+				}
+
+				reader.readAsDataURL(file);
+			}
+
+			function processFile(dataURL, fileType) {
+				var maxWidth = 2000;
+				var maxHeight = 2000;
+
+				var image = new Image();
+				image.src = dataURL;
+
+				image.onload = function () {
+					var width = image.width;
+					var height = image.height;
+					var shouldResize = (width > maxWidth) || (height > maxHeight);
+
+					if (!shouldResize) {
+						sendFile(dataURL);
+						return;
+					}
+
+					var newWidth;
+					var newHeight;
+
+					if (width > height) {
+						newHeight = height * (maxWidth / width);
+						newWidth = maxWidth;
+					} else {
+						newWidth = width * (maxHeight / height);
+						newHeight = maxHeight;
+					}
+
+					var canvas = document.createElement('canvas');
+
+					canvas.width = newWidth;
+					canvas.height = newHeight;
+
+					var context = canvas.getContext('2d');
+
+					context.drawImage(this, 0, 0, newWidth, newHeight);
+
+					dataURL = canvas.toDataURL(fileType);
+
+					sendFile(dataURL);
+				};
+
+				image.onerror = function () {
+					showStatus("error", "Erro ao procesar imagem.");
+				};
+			}
+
+			function sendFile(fileData) {
+				var formData = new FormData();
+
+				formData.append('imageData', fileData);
+				formData.append('path', '{{path}}');
+
+				$.ajax({
+					type: 'POST',
+					url: '/upload',
+					data: formData,
+					contentType: false,
+					processData: false,
+					success: function (data) {
+						if (data.success) {
+							showStatus("sent", "Imagem enviada com sucesso!");
+						} else {
+							showStatus("error", "Imagem recusada pelo servidor.");
+						}
+					},
+					error: function (data) {
+						showStatus("error", "Erro ao conectar com o servidor.");
+					}
+				});
+			}
+
+		</script>
+
+	</body>
+</html>
