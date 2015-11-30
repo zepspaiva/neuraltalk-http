@@ -84,13 +84,24 @@ function runneuraltalk2(modelpath, imagepath, imagecount, usegpu) {
 	for (g in gpuarg)
 		args.push(gpuarg[g]);
 
-	console.log(args);
-
 	var proc = spawn("th", args, { cwd: NEURAL_TALK_2_DIR });
 
 	proc.stdout.on('data', function (data) {
 		var match = NEURAL_TALK_2_RESUTL_REGEX.exec(data);
-		console.log(match);
+		if (match) {
+
+			var i = parseInt(match[0]);
+			var caption = match[1];
+			i--;
+
+			console.log(i,caption);
+
+			fs.writeFile(imagepath + '/' + i + '.json', JSON.stringify({
+				i: i,
+				caption: caption
+			}));
+
+		}
 	});
 
 	proc.stderr.on('data', function (data) {
@@ -118,7 +129,7 @@ function processqueues() {
 			fs.mkdirSync(tempfolder);
 
 			for (i in queue.images)
-				fs.renameSync(queue.images[i], tempfolder + "/" + path.basename(queue.images[i]));
+				fs.renameSync(queue.images[i], tempfolder + "/" + i + path.extname(queue.images[i]));
 
 			console.log("Moved images:", q, tempfolder);
 
