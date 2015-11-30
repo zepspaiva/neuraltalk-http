@@ -21,6 +21,7 @@ var NEURAL_TALK_2_DIR = '../neuraltalk2';
 var NEURAL_TALK_2_DIR_BACK = '../neuraltalk-http/';
 var NEURAL_TALK_2_MODEL_FILE = 'model_id1-501-1448236541.t7_cpu.t7';
 var NEURAL_TALK_2_USE_GPU = false;
+var NEURAL_TALK_2_RESUTL_REGEX = /image\s([0-9]*)\:\s([a-z ]*)/gi;
 
 if (!fs.existsSync(QUEUE_DIR)) fs.mkdirSync(QUEUE_DIR);
 
@@ -88,15 +89,12 @@ function runneuraltalk2(modelpath, imagepath, imagecount, usegpu) {
 	var proc = spawn("th", args, { cwd: NEURAL_TALK_2_DIR });
 
 	proc.stdout.on('data', function (data) {
-	  console.log('stdout: ' + data);
+		var match = NEURAL_TALK_2_RESUTL_REGEX.exec(myString);
+		console.log(match);
 	});
 
 	proc.stderr.on('data', function (data) {
 	  console.log('stderr: ' + data);
-	});
-
-	proc.on('close', function (code) {
-	  console.log('child process exited with code ' + code);
 	});
 
 }
