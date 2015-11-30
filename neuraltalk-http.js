@@ -14,7 +14,7 @@ var fs = require('fs');
 var path = require('path');
 var spawn = require('child_process').spawn;
 
-var PORT = 80;
+var PORT = 8080;
 var QUEUE_DIR = './queue';
 
 var NEURAL_TALK_2_DIR = '../neuraltalk2';
