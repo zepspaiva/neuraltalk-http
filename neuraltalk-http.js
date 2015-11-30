@@ -50,6 +50,7 @@ function ntqueueimg(name, filepath) {
 	if (!queues[name]) {
 		
 		queues[name] = {
+			name: name,
 			lastevent: (new Date()).getTime(),
 			images: [filepath]
 		}
@@ -76,7 +77,6 @@ function ntqueueimg(name, filepath) {
 	}
 
 }
-
 
 function runneuraltalk2(modelpath, imagepath, imagecount, imagesfiles, queuename, usegpu, callback) {
 
@@ -164,13 +164,13 @@ function processqueues() {
 				fs.renameSync(queue.images[i], tempfolder + "/" + i + path.extname(queue.images[i]));
 			}
 
-			console.log("Moved images:", q, tempfolder);
+			console.log("Moved images:", queue["name"], tempfolder);
 
-			runneuraltalk2(NEURAL_TALK_2_MODEL_FILE, tempfolder, queue.images.length, imagefiles, q, NEURAL_TALK_2_USE_GPU, function() {
+			runneuraltalk2(NEURAL_TALK_2_MODEL_FILE, tempfolder, queue.images.length, imagefiles, queue["name"], NEURAL_TALK_2_USE_GPU, function() {
 
 				queue.images = [];
 				queue.processing = false;
-				console.log("Runned:", q);
+				console.log("Runned:", queue["name"]);
 
 			});
 
