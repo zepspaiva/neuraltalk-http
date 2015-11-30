@@ -12,6 +12,8 @@ var session = require('express-session');
 
 var fs = require('fs');
 
+var ntqueue = require('neuraltalk-queue.js')
+
 var PORT = 80;
 var QUEUE_DIR = './queue';
 
@@ -50,11 +52,14 @@ app.post('/upload', multipartMiddleware, function(req, res) {
 
 	base64Data = base64Data.substr(base64Header.length);
 
-	console.log(path);
+	var filepath = QUEUE_DIR + "/" + (new Date()).getTime() "." + ext;
 
-	fs.writeFile("out." + ext, base64Data, 'base64', function(err) {
+	fs.writeFile(filepath, base64Data, 'base64', function(err) {
 		if (err) res.status(200).send({ success: false });
+
+		ntqueue.queue(filepath)
 		res.status(200).send({ success: true });
+
 	});
 
 });
