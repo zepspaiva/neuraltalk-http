@@ -82,6 +82,8 @@ function runneuraltalk2(modelpath, imagepath, imagecount, usegpu) {
 	for (g in gpuarg)
 		args.push(gpuarg[g]);
 
+	console.log(args);
+
 	var proc = spawn("th", args, { cwd: NEURAL_TALK_2_DIR });
 
 	proc.stdout.on('data', function (data) {
