@@ -12,7 +12,7 @@ var session = require('express-session');
 
 var fs = require('fs');
 
-var PORT = 3001;
+var PORT = 80;
 var QUEUE_DIR = './queue';
 
 if (!fs.existsSync(QUEUE_DIR)) fs.mkdirSync(QUEUE_DIR);
