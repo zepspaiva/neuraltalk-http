@@ -13,7 +13,7 @@ var session = require('express-session');
 var fs = require('fs');
 var path = require('path');
 
-var PORT = 8000;
+var PORT = 80;
 var QUEUE_DIR = './queue';
 
 var NEURAL_TALK_2_DIR = '../neuraltalk2';
