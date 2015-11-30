@@ -12,6 +12,7 @@ var session = require('express-session');
 
 var fs = require('fs');
 var path = require('path');
+var spawn = require('child_process').spawn;
 
 var PORT = 80;
 var QUEUE_DIR = './queue';
