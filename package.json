@@ -1,7 +1,7 @@
 {
   "name": "neuraltalk-http",
   "version": "1.0.0",
-  "author": "José Augusto Paiva (zepspaiva@gmail.com)"
+  "author": "José Augusto Paiva (zepspaiva@gmail.com)",
   "description": "",
   "main": "neuraltalk-http.js",
   "dependencies": {
