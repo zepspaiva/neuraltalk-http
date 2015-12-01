@@ -180,7 +180,7 @@ app.post('/upload', multipartMiddleware, function(req, res) {
 			console.log(jsonfilepath);
 			console.log(resultobj);
 
-			res.render('image_result.html', { f: f, image: imagefilepath.subtr(RESULTS_DIR.length), caption: resultobj.caption });
+			res.render('image_result.html', { f: f, image: imagefilepath.substr(RESULTS_DIR.length), caption: resultobj.caption });
 		});
 
 	});
