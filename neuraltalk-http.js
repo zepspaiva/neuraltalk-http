@@ -185,9 +185,9 @@ app.post('/upload', multipartMiddleware, function(req, res) {
 	fs.writeFile(filepath, base64Data, 'base64', function(err) {
 		if (err) res.status(200).send({ success: false });
 
-		autoorientimage(imagefilepath, function() {
+		ntstandalone(f, filepath, function(imagefilepath, jsonfilepath) {
 
-			ntstandalone(f, filepath, function(imagefilepath, jsonfilepath) {
+			autoorientimage(imagefilepath, function() {
 
 				var resultobj = JSON.parse(fs.readFileSync(jsonfilepath));
 
