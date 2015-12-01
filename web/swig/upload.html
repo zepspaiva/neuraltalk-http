@@ -69,7 +69,7 @@
                     	</div>
 
                     	<div id="sendingPhoto" class="hidden">
-                    		<p><i class="fa fa-cog fa-spin"></i></p><p class="optionButtonText" data-reactid=".4.0:2">Enviando...</span><span data-reactid=".4.1"></p>
+                    		<p><i class="fa fa-cog fa-spin"></i></p><p class="optionButtonText" data-reactid=".4.0:2">Processando...</span><span data-reactid=".4.1"></p>
                     	</div>
 
                     	<div id="sentPhoto" class="hidden">
@@ -95,7 +95,7 @@
                     	</div>
 
                     	<div id="sendingPhoto" class="hidden">
-                    		<p><i class="fa fa-cog fa-spin"></i></p><p class="optionButtonText" data-reactid=".4.0:2">Enviando...</span><span data-reactid=".4.1"></p>
+                    		<p><i class="fa fa-cog fa-spin"></i></p><p class="optionButtonText" data-reactid=".4.0:2">Processando...</span><span data-reactid=".4.1"></p>
                     	</div>
 
                     	<div id="sentPhoto" class="hidden">
@@ -232,7 +232,7 @@
 
 			function readFile(file) {
 
-				showStatus("sending", "Enviando...");
+				showStatus("sending", "Processando...");
 
 				var reader = new FileReader();
 
@@ -308,7 +308,7 @@
 					processData: false,
 					success: function (data) {
 						if (data.success) {
-							showStatus("sent", "Imagem enviada com sucesso!");
+							showStatus("sent", "Imagem processada com sucesso!");
 						} else {
 							showStatus("error", "Imagem recusada pelo servidor.");
 						}

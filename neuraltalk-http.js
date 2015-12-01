@@ -92,13 +92,11 @@ function runneuraltalk2(modelpath, imagepath, imagecount, imagesfiles, queuename
 				fs.renameSync(jsonpath, newjsonpath);
 				fs.renameSync(imagefilepath, newimagefilepath);
 
+				if (callback) callback(queuepath, filename);
+
 			}
 
 		}
-
-		deletefolder(imagepath);
-
-		if (callback) callback();
 
 	});
 
@@ -106,14 +104,19 @@ function runneuraltalk2(modelpath, imagepath, imagecount, imagesfiles, queuename
 
 function ntstandalone(foldername, filepath, callback) {
 
-	var tempfolder = QUEUE_DIR + "/" + foldername + "_" + (new Date()).getTime();
+	var tempfoldername = foldername + "_" + (new Date()).getTime();
+	var tempfolder = QUEUE_DIR + "/" + tempfoldername;
 	var filename = path.basename(filepath);
 	var tempimgpath = tempfolder + "/" + filename;
 
 	fs.mkdirSync(tempfolder);
 	fs.renameSync(filepath, tempimgpath);
 
-	runneuraltalk2(NEURAL_TALK_2_MODEL_FILE, tempfolder, 1, [filename], foldername, NEURAL_TALK_2_USE_GPU, callback);
+	runneuraltalk2(NEURAL_TALK_2_MODEL_FILE, tempfolder, 1, [filename], foldername, NEURAL_TALK_2_USE_GPU, function() {
+
+		if (callback) callback(tempfoldername, filename);
+
+	});
 
 }
 
@@ -143,6 +146,16 @@ app.get('/', function(req, res) {
 
 });
 
+app.get('/img/:foldername/:filename', function(req, res) {
+
+	var foldername = req.params.foldername;
+	var filename = req.params.filename;
+	var filepath = foldername + "/" + filename;
+
+	fs.createReadStream(filepath).pipe(res);
+
+});
+
 app.post('/upload', multipartMiddleware, function(req, res) {
 
 	var f = req.body.f;
@@ -159,8 +172,15 @@ app.post('/upload', multipartMiddleware, function(req, res) {
 		if (err) res.status(200).send({ success: false });
 
 		//ntqueueimg(f, filepath)
-		ntstandalone(f, filepath, function() {
-			res.status(200).send({ success: true });
+		ntstandalone(f, filepath, function(foldername, filename) {
+
+			var jsonfilepath = RESULTS_DIR + "/" + foldername + "/" path.basename(filename) + ".json";
+			var resultobj = JSON.parse(fs.readFileSync(jsonfilepath));
+
+			console.log(jsonfilepath);
+			console.log(resultobj);
+
+			res.render('image_result.html', { f: f, foldername: foldername, filename: filename });
 		});
 
 	});
