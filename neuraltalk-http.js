@@ -177,7 +177,7 @@ app.post('/upload', multipartMiddleware, function(req, res) {
 
 			var resultobj = JSON.parse(fs.readFileSync(jsonfilepath));
 
-			res.status(200).send({ success: false, image: imagefilepath.substr(RESULTS_DIR.length), caption: resultobj.caption });
+			res.status(200).send({ success: true, image: imagefilepath.substr(RESULTS_DIR.length), caption: resultobj.caption });
 			
 		});
 
