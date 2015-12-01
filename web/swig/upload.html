@@ -167,7 +167,7 @@
 						var file = e.target.files[0];
 
 						if (file) {
-							if (/^image\//i.test(file.type) || /^zip\//i.test(file.type)) {
+							if (/^image\//i.test(file.type) || /zip/i.test(file.type)) {
 								readFile(file);
 							} else {
 								showStatus("error", "Not a valid image!");
@@ -288,9 +288,11 @@
 						showStatus("error", "There was an error processing the file!");
 					};
 
-				} else if (/^zip\//i.test(fileType)) {
+				} else if (/zip/i.test(fileType)) {
 
+					console.log('a');
 
+					sendFile(dataURL);
 
 				}
 

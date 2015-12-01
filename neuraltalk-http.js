@@ -182,30 +182,54 @@ app.post('/upload', multipartMiddleware, function(req, res) {
 
 	var f = req.body.f;
 	var base64Data = req.body.imageData;
-	var base64Header = base64Data.substr(0, base64Data.indexOf("base64,") + "base64,".length);
-	var ext = base64Header.match(/^data:image\/([a-z]+);base64,/)[1];
-	if (ext === "jpeg") ext = "jpg";
 
-	base64Data = base64Data.substr(base64Header.length);
+	if (base64Data) {
 
-	var filepath = QUEUE_DIR + "/" + f + "_" + (new Date()).getTime() + "." + ext;
+		var base64Header = base64Data.substr(0, base64Data.indexOf("base64,") + "base64,".length);
+		var ext = base64Header.match(/^data:image\/([a-z]+);base64,/)[1];
+		if (ext === "jpeg") ext = "jpg";
 
-	fs.writeFile(filepath, base64Data, 'base64', function(err) {
-		if (err) res.status(200).send({ success: false });
+		base64Data = base64Data.substr(base64Header.length);
 
-		ntstandalone(f, filepath, function(imagefilepath, jsonfilepath) {
+		var filepath = QUEUE_DIR + "/" + f + "_" + (new Date()).getTime() + "." + ext;
 
-			autoorientimage(imagefilepath, function() {
+		fs.writeFile(filepath, base64Data, 'base64', function(err) {
+			if (err) res.status(200).send({ success: false });
 
-				var resultobj = JSON.parse(fs.readFileSync(jsonfilepath));
+			ntstandalone(f, filepath, function(imagefilepath, jsonfilepath) {
 
-				res.status(200).send({ success: true, image: imagefilepath.substr(RESULTS_DIR.length), caption: resultobj.caption });
-				
+				autoorientimage(imagefilepath, function() {
+
+					var resultobj = JSON.parse(fs.readFileSync(jsonfilepath));
+
+					res.status(200).send({ success: true, image: imagefilepath.substr(RESULTS_DIR.length), caption: resultobj.caption });
+					
+				});
+
 			});
 
 		});
 
-	});
+	} else {
+
+		base64Data = req.body.zipData;
+
+		if (base64Data) {
+			
+			var filepath = QUEUE_DIR + "/" + f + "_" + (new Date()).getTime() + ".zip";
+
+			fs.writeFile(filepath, base64Data, 'base64', function(err) {
+				if (err) res.status(200).send({ success: false });
+				
+				
+				
+				res.status(200).send({ success: true });
+
+			});
+
+		}
+
+	}
 
 });
 
