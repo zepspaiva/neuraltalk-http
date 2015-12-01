@@ -215,14 +215,17 @@ app.post('/upload', multipartMiddleware, function(req, res) {
 		base64Data = req.body.zipData;
 
 		if (base64Data) {
+
+			var base64Header = base64Data.substr(0, base64Data.indexOf("base64,") + "base64,".length);
+			base64Data = base64Data.substr(base64Header.length);
 			
 			var filepath = QUEUE_DIR + "/" + f + "_" + (new Date()).getTime() + ".zip";
 
 			fs.writeFile(filepath, base64Data, 'base64', function(err) {
 				if (err) res.status(200).send({ success: false });
 				
-				
-				
+
+
 				res.status(200).send({ success: true });
 
 			});
