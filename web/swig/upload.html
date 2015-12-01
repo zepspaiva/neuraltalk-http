@@ -65,7 +65,7 @@
 
                     	<div id="selectPhoto">
                     		<p><i class="fa fa-camera"></i></p><p class="optionButtonText" data-reactid=".4.0:2">Adicionar foto</span><span data-reactid=".4.1"></p>
-                    		<input type="file" id="file" class="upload" accept="image/*" data-reactid=".4.0:1">
+                    		<input type="file" id="file" class="upload" accept="file/*" data-reactid=".4.0:1">
                     	</div>
 
                     	<div id="sendingPhoto" class="hidden">
@@ -74,12 +74,12 @@
 
                     	<div id="sentPhoto" class="hidden">
                     		<p><i class="fa fa-check"></i></p><p class="optionButtonText" data-reactid=".4.0:2">Processada!</span><span data-reactid=".4.1"></p>
-                    		<input type="file" id="file" class="upload" accept="image/*" data-reactid=".4.0:1">
+                    		<input type="file" id="file" class="upload" accept="file/*" data-reactid=".4.0:1">
                     	</div>
 
                     	<div id="errorPhoto" class="hidden">
                     		<p><i class="fa fa-disabled"></i></p><p class="optionButtonText" data-reactid=".4.0:2">Erro!</span><span data-reactid=".4.1"></p>
-                    		<input type="file" id="file" class="upload" accept="image/*" data-reactid=".4.0:1">
+                    		<input type="file" id="file" class="upload" accept="file/*" data-reactid=".4.0:1">
                     	</div>
 
                     </button>
@@ -167,6 +167,9 @@
 						var file = e.target.files[0];
 
 						if (file) {
+
+							console.log(file.type);
+
 							if (/^image\//i.test(file.type)) {
 								readFile(file);
 							} else {
@@ -227,6 +230,7 @@
 				}
 
 				reader.onerror = function () {
+					console.log('1');
 					showStatus("error", "There was an error reading the file!");
 				}
 
@@ -238,53 +242,106 @@
 				$('#resultimg').empty();
 				$('#resultimg').css('background-image', '');
 
-				var maxWidth = 2000;
-				var maxHeight = 2000;
+				if (/^image\//i.test(fileType)) {
 
-				var image = new Image();
-				image.src = dataURL;
+					var maxWidth = 2000;
+					var maxHeight = 2000;
 
-				image.onload = function () {
-					var width = image.width;
-					var height = image.height;
-					var shouldResize = (width > maxWidth) || (height > maxHeight);
+					var image = new Image();
+					image.src = dataURL;
 
-					//if (!shouldResize) {
-						sendFile(dataURL);
-						return;
-					//}
+					image.onload = function () {
 
-					var newWidth;
-					var newHeight;
+						var width = image.width;
+						var height = image.height;
+						var shouldResize = (width > maxWidth) || (height > maxHeight);
 
-					if (width > height) {
-						newHeight = height * (maxWidth / width);
-						newWidth = maxWidth;
-					} else {
-						newWidth = width * (maxHeight / height);
-						newHeight = maxHeight;
-					}
+						if (!shouldResize) {
+							sendFile(dataURL);
+							return;
+						}
 
-					var canvas = document.createElement('canvas');
+						var newWidth;
+						var newHeight;
 
-					canvas.width = newWidth;
-					canvas.height = newHeight;
+						if (width > height) {
+							newHeight = height * (maxWidth / width);
+							newWidth = maxWidth;
+						} else {
+							newWidth = width * (maxHeight / height);
+							newHeight = maxHeight;
+						}
 
-					var context = canvas.getContext('2d');
+						var canvas = document.createElement('canvas');
 
-					context.drawImage(this, 0, 0, newWidth, newHeight);
+						canvas.width = newWidth;
+						canvas.height = newHeight;
 
-					dataURL = canvas.toDataURL(fileType);
+						var context = canvas.getContext('2d');
 
-					sendFile(dataURL);
-				};
+						context.drawImage(this, 0, 0, newWidth, newHeight);
 
-				image.onerror = function () {
-					showStatus("error", "Erro ao procesar imagem.");
-				};
+						dataURL = canvas.toDataURL(fileType);
+
+						sendImage(dataURL);
+
+					};
+
+					image.onerror = function () {
+						showStatus("error", "There was an error processing the file!");
+					};
+
+				} else if (/^zip\//i.test(fileType)) {
+
+
+
+				}
+
+			}
+
+			function downloadSrt(srturl) {
+
+				window.location.href = 'srt/' + srturl;
+
 			}
 
 			function sendFile(fileData) {
+				var formData = new FormData();
+
+				formData.append('zipData', fileData);
+				formData.append('f', '{{f}}');
+
+				$.ajax({
+					type: 'POST',
+					url: '/upload',
+					data: formData,
+					contentType: false,
+					processData: false,
+					success: function (data) {
+						
+						if (data.success) {
+
+							showStatus("sent", "Imagens processada com sucesso!");
+							downloadSrt(data.srt);
+
+						} else {
+
+							console.log('3');
+							showStatus("error", "Imagens recusada pelo servidor.");
+
+						}
+
+					},
+					error: function (data) {
+
+						console.log('4');
+						showStatus("error", "Erro ao conectar com o servidor.");
+
+					}
+				});
+			}
+
+			function sendImage(fileData) {
 				var formData = new FormData();
 
 				formData.append('imageData', fileData);
@@ -305,12 +362,15 @@
 
 						} else {
 
+							console.log('3');
 							showStatus("error", "Imagem recusada pelo servidor.");
 
 						}
+
 					},
 					error: function (data) {
 
+						console.log('4');
 						showStatus("error", "Erro ao conectar com o servidor.");
 
 					}
