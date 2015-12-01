@@ -128,6 +128,14 @@ function autoorientimage(filepath, callback) {
 
 	var proc = spawn("convert", [filepath, '-auto-orient', filepath]);
 
+	proc.stdout.on('data', function (data) {
+		console.log('stdout: ' + data);
+	});
+
+	proc.stderr.on('data', function (data) {
+		console.log('stderr: ' + data);
+	});
+
 	proc.on('close', function(code) {
 		if (callback) callback();
 	});
