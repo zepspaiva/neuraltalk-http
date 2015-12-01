@@ -167,10 +167,7 @@
 						var file = e.target.files[0];
 
 						if (file) {
-
-							console.log(file.type);
-
-							if (/^image\//i.test(file.type)) {
+							if (/^image\//i.test(file.type) || /^zip\//i.test(file.type)) {
 								readFile(file);
 							} else {
 								showStatus("error", "Not a valid image!");
