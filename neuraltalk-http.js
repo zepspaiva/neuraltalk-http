@@ -90,13 +90,10 @@ function runneuraltalk2(modelpath, imagepath, imagecount, imagesfiles, queuename
 				var newjsonpath = queuepath + "/" + filename + ".json";
 				var newimagefilepath = queuepath + "/" + filename + path.extname(imagesfiles[i]);
 
-				console.log(newjsonpath);
-				console.log(newimagefilepath);
-
 				fs.renameSync(jsonpath, newjsonpath);
 				fs.renameSync(imagefilepath, newimagefilepath);
 
-				if (callback) callback(queuepath, filename);
+				if (callback) callback(newimagefilepath, newjsonpath);
 
 			}
 
@@ -116,9 +113,9 @@ function ntstandalone(foldername, filepath, callback) {
 	fs.mkdirSync(tempfolder);
 	fs.renameSync(filepath, tempimgpath);
 
-	runneuraltalk2(NEURAL_TALK_2_MODEL_FILE, tempfolder, 1, [filename], foldername, NEURAL_TALK_2_USE_GPU, function() {
+	runneuraltalk2(NEURAL_TALK_2_MODEL_FILE, tempfolder, 1, [filename], foldername, NEURAL_TALK_2_USE_GPU, function(imagefilepath, jsonfilepath) {
 
-		if (callback) callback(tempfoldername, filename);
+		if (callback) callback(imagefilepath, jsonfilepath);
 
 	});
 
@@ -176,15 +173,14 @@ app.post('/upload', multipartMiddleware, function(req, res) {
 		if (err) res.status(200).send({ success: false });
 
 		//ntqueueimg(f, filepath)
-		ntstandalone(f, filepath, function(foldername, filename) {
+		ntstandalone(f, filepath, function(imagefilepath, jsonfilepath) {
 
-			var jsonfilepath = RESULTS_DIR + "/" + foldername + "/" + path.basename(filename, path.extname(filename)) + ".json";
 			var resultobj = JSON.parse(fs.readFileSync(jsonfilepath));
 
 			console.log(jsonfilepath);
 			console.log(resultobj);
 
-			res.render('image_result.html', { f: f, foldername: foldername, filename: filename });
+			res.render('image_result.html', { f: f, image: imagefilepath.subtr(RESULTS_DIR.length), caption: resultobj.caption });
 		});
 
 	});
