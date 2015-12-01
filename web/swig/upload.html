@@ -73,7 +73,7 @@
                     	</div>
 
                     	<div id="sentPhoto" class="hidden">
-                    		<p><i class="fa fa-check"></i></p><p class="optionButtonText" data-reactid=".4.0:2">Enviada!</span><span data-reactid=".4.1"></p>
+                    		<p><i class="fa fa-check"></i></p><p class="optionButtonText" data-reactid=".4.0:2">Processada!</span><span data-reactid=".4.1"></p>
                     		<input type="file" id="file" class="upload" accept="image/*" data-reactid=".4.0:1">
                     	</div>
 
@@ -211,9 +211,8 @@
 
 			function showImage(image, caption) {
 
-				$('#resultimg').empty();
-				$('<img>').attr('src', './img' + image).appendTo('#resultimg');
 				$('<p>').html(caption).appendTo('#resultimg');
+				$('#resultimg').css('background-image', 'url(' + image + ')');
 
 			}
 
@@ -235,6 +234,9 @@
 			}
 
 			function processFile(dataURL, fileType) {
+
+				$('#resultimg').empty();
+
 				var maxWidth = 2000;
 				var maxHeight = 2000;
 
