@@ -2,7 +2,7 @@ var express = require('express');
 var app = express();
 var flash = require('connect-flash');
 var multipart = require('connect-multiparty');
-var multipartMiddleware = multipart();
+var multipartMiddleware = multipart({ maxFilesSize: 5*1024*1024 });
 
 var swig = require('swig');
 var morgan = require('morgan');
@@ -146,7 +146,7 @@ function autoorientimage(filepath, callback) {
 
 app.use(morgan('dev'));
 app.use(cookieParser());
-app.use(bodyParser.json({limit: '15mb'}));
+app.use(bodyParser.json({ limit: '15mb' }));
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.set('view cache', false);
