@@ -50,6 +50,10 @@ function runneuraltalk2(modelpath, imagepath, imagecount, imagesfiles, queuename
 	for (g in gpuarg)
 		args.push(gpuarg[g]);
 
+	fs.writeFile(imagepath + '/0.json', JSON.stringify({
+		caption: 'Undefined.'
+	}));
+
 	var proc = spawn("th", args, { cwd: NEURAL_TALK_2_DIR });
 
 	proc.stdout.on('data', function (data) {
@@ -60,8 +64,6 @@ function runneuraltalk2(modelpath, imagepath, imagecount, imagesfiles, queuename
 			var i = parseInt(match[1]);
 			var caption = match[2];
 			i--;
-
-			console.log(caption);
 
 			fs.writeFile(imagepath + '/' + i + '.json', JSON.stringify({
 				caption: caption
@@ -151,7 +153,7 @@ app.get('/img/:foldername/:filename', function(req, res) {
 
 	var foldername = req.params.foldername;
 	var filename = req.params.filename;
-	var filepath = foldername + "/" + filename;
+	var filepath = RESULTS_DIR + "/" + foldername + "/" + filename;
 
 	fs.createReadStream(filepath).pipe(res);
 
