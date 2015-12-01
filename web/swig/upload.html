@@ -213,7 +213,7 @@
 
 				$('#resultimg').empty();
 
-				$('<img>').attr('src', './img/' + image).appendTo('#resultimg');
+				$('<img>').attr('src', './img' + image).appendTo('#resultimg');
 				$('<p>').html(caption).appendTo('#resultimg');
 
 			}
@@ -299,7 +299,7 @@
 						if (data.success) {
 
 							showStatus("sent", "Imagem processada com sucesso!");
-							showImage(data.image, data.cpation);
+							showImage(data.image, data.caption);
 
 						} else {
 
