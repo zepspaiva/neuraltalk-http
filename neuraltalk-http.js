@@ -174,7 +174,7 @@ app.post('/upload', multipartMiddleware, function(req, res) {
 		//ntqueueimg(f, filepath)
 		ntstandalone(f, filepath, function(foldername, filename) {
 
-			var jsonfilepath = RESULTS_DIR + "/" + foldername + "/" path.basename(filename) + ".json";
+			var jsonfilepath = RESULTS_DIR + "/" + foldername + "/" + path.basename(filename) + ".json";
 			var resultobj = JSON.parse(fs.readFileSync(jsonfilepath));
 
 			console.log(jsonfilepath);
