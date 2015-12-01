@@ -2,7 +2,7 @@ var express = require('express');
 var app = express();
 var flash = require('connect-flash');
 var multipart = require('connect-multiparty');
-var multipartMiddleware = multipart({ maxFilesSize: 5*1024*1024 });
+var multipartMiddleware = multipart({ maxFieldsSize: 5*1024*1024 });
 
 var swig = require('swig');
 var morgan = require('morgan');
