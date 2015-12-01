@@ -309,6 +309,7 @@
 					success: function (data) {
 						if (data.success) {
 							showStatus("sent", "Imagem processada com sucesso!");
+							console.log(data);
 						} else {
 							showStatus("error", "Imagem recusada pelo servidor.");
 						}
