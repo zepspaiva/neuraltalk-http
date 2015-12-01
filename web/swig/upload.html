@@ -85,31 +85,8 @@
                     </button>
                 </div>
                 
-                <!--
-                <div class="uploadButtonD">
-                    <button class="composeOptionButton rc-Button x-icon" type="button" data-reactid=".4">
-
-                    	<div id="selectPhoto">
-                    		<p><i class="fa fa-camera"></i></p><p class="optionButtonText" data-reactid=".4.0:2">Adicionar video</span><span data-reactid=".4.1"></p>
-                    		<input type="file" id="file" class="upload" accept="video/*" data-reactid=".4.0:1" capture>
-                    	</div>
-
-                    	<div id="sendingPhoto" class="hidden">
-                    		<p><i class="fa fa-cog fa-spin"></i></p><p class="optionButtonText" data-reactid=".4.0:2">Processando...</span><span data-reactid=".4.1"></p>
-                    	</div>
-
-                    	<div id="sentPhoto" class="hidden">
-                    		<p><i class="fa fa-check"></i></p><p class="optionButtonText" data-reactid=".4.0:2">Enviada!</span><span data-reactid=".4.1"></p>
-                    		<input type="file" id="file" class="upload" accept="video/*" data-reactid=".4.0:1" capture>
-                    	</div>
-
-                    	<div id="errorPhoto" class="hidden">
-                    		<p><i class="fa fa-disabled"></i></p><p class="optionButtonText" data-reactid=".4.0:2">Erro!</span><span data-reactid=".4.1"></p>
-                    		<input type="file" id="file" class="upload" accept="video/*" data-reactid=".4.0:1" capture>
-                    	</div>
-
-                    </button>
-                </div>-->
+                <div id="resultimg">
+                </div>
 
 			</div>
 
@@ -199,7 +176,9 @@
 					});
 
 				} else {
+
 					showStatus("error", "File upload is not supported!");
+
 				}
 
 			});
@@ -227,6 +206,15 @@
 					$('#sentPhoto').addClass('hidden')
 					$('#errorPhoto').removeClass('hidden')
 				}
+
+			}
+
+			function showImage(image, caption) {
+
+				$('#resultimg').empty();
+
+				$('<img>').attr('src', './img/' + image).appendTo('#resultimg');
+				$('<p>').html(caption).appendTo('#resultimg');
 
 			}
 
@@ -308,16 +296,21 @@
 					processData: false,
 					success: function (data) {
 						
-						console.log(data);
-
 						if (data.success) {
+
 							showStatus("sent", "Imagem processada com sucesso!");
+							showImage(data.image, data.cpation);
+
 						} else {
+
 							showStatus("error", "Imagem recusada pelo servidor.");
+
 						}
 					},
 					error: function (data) {
+
 						showStatus("error", "Erro ao conectar com o servidor.");
+
 					}
 				});
 			}
