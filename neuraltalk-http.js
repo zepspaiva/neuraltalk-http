@@ -41,43 +41,6 @@ var deletefolder = function(path) {
   }
 };
 
-// === NEURALTALK QUEUE
-
-var queues = {}
-
-function ntqueueimg(name, filepath) {
-
-	if (!queues[name]) {
-		
-		queues[name] = {
-			name: name,
-			lastevent: (new Date()).getTime(),
-			images: [filepath]
-		}
-
-	} else {
-
-		var queue = queues[name];
-
-		if (queue.processing) {
-
-			setTimeout(function() {
-				ntqueueimg(name, filepath);
-			}, 2000);
-
-		} else {
-
-			queue.lastevent = (new Date()).getTime();
-			queue.images.push(filepath);
-
-			console.log("Queued", name, filepath)
-
-		}
-
-	}
-
-}
-
 function runneuraltalk2(modelpath, imagepath, imagecount, imagesfiles, queuename, usegpu, callback) {
 
 	var gpuarg = [];
@@ -141,52 +104,18 @@ function runneuraltalk2(modelpath, imagepath, imagecount, imagesfiles, queuename
 
 }
 
-function processqueues() {
+function ntstandalone(foldername, filepath, callback) {
 
-	for (q in queues) {
+	var tempfolder = QUEUE_DIR + "/" + foldername + "_" + (new Date()).getTime();
+	var filename = path.basename(filepath);
+	var tempimgpath = tempfolder + "/" + filename;
 
-		var queue = queues[q];
+	fs.mkdirSync(tempfolder);
+	fs.renameSync(filepath, tempimgpath);
 
-		if (!queue.processing &&
-			queue.images.length > 0 &&
-			((new Date()).getTime() - queue.lastevent > 3000 ||
-			queue.images.length > 5)) {
-
-			queue.processing = true;
-
-			console.log("Will run:", q, JSON.stringify(queue.images));
-
-			var tempfolder = QUEUE_DIR + "/" + q + "_" + (new Date()).getTime();
-			fs.mkdirSync(tempfolder);
-
-			var imagefiles = [];
-
-			for (i in queue.images) {
-				imagefiles.push(i + path.extname(queue.images[i]));
-				fs.renameSync(queue.images[i], tempfolder + "/" + i + path.extname(queue.images[i]));
-			}
-
-			console.log("Moved images:", queue["name"], tempfolder);
-
-			runneuraltalk2(NEURAL_TALK_2_MODEL_FILE, tempfolder, queue.images.length, imagefiles, queue["name"], NEURAL_TALK_2_USE_GPU, function() {
-
-				queue.images = [];
-				queue.processing = false;
-				console.log("Runned:", queue["name"]);
-
-			});
-
-		}
-
-	}
-
-	setTimeout(function() {
-		processqueues();
-	}, 2000);
+	runneuraltalk2(NEURAL_TALK_2_MODEL_FILE, tempfolder, 1, [tempimgpath], foldername, NEURAL_TALK_2_USE_GPU, callback);
 
 }
-
-processqueues();
 
 // ===
 
@@ -229,8 +158,10 @@ app.post('/upload', multipartMiddleware, function(req, res) {
 	fs.writeFile(filepath, base64Data, 'base64', function(err) {
 		if (err) res.status(200).send({ success: false });
 
-		ntqueueimg(f, filepath)
-		res.status(200).send({ success: true });
+		//ntqueueimg(f, filepath)
+		ntstandalone(f, filepath, function() {
+			res.status(200).send({ success: true });
+		});
 
 	});
 
