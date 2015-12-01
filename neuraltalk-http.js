@@ -97,6 +97,8 @@ function runneuraltalk2(modelpath, imagepath, imagecount, imagesfiles, queuename
 			var caption = match[2];
 			i--;
 
+			console.log(caption);
+
 			fs.writeFile(imagepath + '/' + i + '.json', JSON.stringify({
 				caption: caption
 			}));
