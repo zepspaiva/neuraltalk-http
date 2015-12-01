@@ -113,7 +113,7 @@ function ntstandalone(foldername, filepath, callback) {
 	fs.mkdirSync(tempfolder);
 	fs.renameSync(filepath, tempimgpath);
 
-	runneuraltalk2(NEURAL_TALK_2_MODEL_FILE, tempfolder, 1, [tempimgpath], foldername, NEURAL_TALK_2_USE_GPU, callback);
+	runneuraltalk2(NEURAL_TALK_2_MODEL_FILE, tempfolder, 1, [filename], foldername, NEURAL_TALK_2_USE_GPU, callback);
 
 }
 
