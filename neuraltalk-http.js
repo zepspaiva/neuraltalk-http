@@ -123,6 +123,17 @@ function ntstandalone(foldername, filepath, callback) {
 
 }
 
+function autoorientimage(filepath, callback) {
+
+
+	var proc = spawn("convert", [filepath, '-auto-orient', filepath]);
+
+	proc.on('close', function(code) {
+		if (callback) callback();
+	});
+
+}
+
 // ===
 
 app.use(morgan('dev'));
@@ -174,13 +185,16 @@ app.post('/upload', multipartMiddleware, function(req, res) {
 	fs.writeFile(filepath, base64Data, 'base64', function(err) {
 		if (err) res.status(200).send({ success: false });
 
-		//ntqueueimg(f, filepath)
-		ntstandalone(f, filepath, function(imagefilepath, jsonfilepath) {
+		autoorientimage(imagefilepath, function() {
 
-			var resultobj = JSON.parse(fs.readFileSync(jsonfilepath));
+			ntstandalone(f, filepath, function(imagefilepath, jsonfilepath) {
 
-			res.status(200).send({ success: true, image: imagefilepath.substr(RESULTS_DIR.length), caption: resultobj.caption });
-			
+				var resultobj = JSON.parse(fs.readFileSync(jsonfilepath));
+
+				res.status(200).send({ success: true, image: imagefilepath.substr(RESULTS_DIR.length), caption: resultobj.caption });
+				
+			});
+
 		});
 
 	});
