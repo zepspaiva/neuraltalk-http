@@ -53,6 +53,7 @@ function runneuraltalk2(modelpath, imagepath, imagecount, imagesfiles, queuename
 	var proc = spawn("th", args, { cwd: NEURAL_TALK_2_DIR });
 
 	proc.stdout.on('data', function (data) {
+
 		var match = NEURAL_TALK_2_RESUTL_REGEX.exec(data);
 		if (match) {
 
@@ -88,6 +89,9 @@ function runneuraltalk2(modelpath, imagepath, imagecount, imagesfiles, queuename
 
 				var newjsonpath = queuepath + "/" + filename + ".json";
 				var newimagefilepath = queuepath + "/" + filename + path.extname(imagesfiles[i]);
+
+				console.log(newjsonpath);
+				console.log(newimagefilepath);
 
 				fs.renameSync(jsonpath, newjsonpath);
 				fs.renameSync(imagefilepath, newimagefilepath);
