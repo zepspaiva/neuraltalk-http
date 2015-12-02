@@ -152,27 +152,6 @@
 
 				function setupPhoto() {
 
-					function gotSources(sourceInfos) {
-						console.log(sourceInfos);
-					  for (var i = 0; i !== sourceInfos.length; ++i) {
-					    var sourceInfo = sourceInfos[i];
-					    var option = document.createElement('option');
-					    option.value = sourceInfo.id;
-					    if (sourceInfo.kind === 'video') {
-					      option.text = sourceInfo.label || 'camera ' + (videoSelect.length + 1);
-					      videoSelect.appendChild(option);
-					    } else {
-					      console.log('Some other kind of source: ', sourceInfo);
-					    }
-					  }
-					}
-
-					if (typeof MediaStreamTrack === 'undefined' || typeof MediaStreamTrack.getSources === 'undefined') {
-					    alert('This browser does not support MediaStreamTrack.\n\nTry Chrome.');
-					} else {
-						MediaStreamTrack.getSources(gotSources);
-					}
-
 					window.addEventListener("DOMContentLoaded", function() {
 						// Grab elements, create settings, etc.
 						var canvas = document.getElementById("canvas"),
