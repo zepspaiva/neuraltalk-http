@@ -223,9 +223,13 @@ function generatesrt(folderpath, callback) {
 
 	}
 
+	console.log(subtitles);
+
 	subtitles = subtitles.sort(function(a,b) {
 	    return a.sec > b.sec;
 	});
+
+	console.log(subtitles);
 
 	var subtitlescontent = '';
 	var subi = 0;
