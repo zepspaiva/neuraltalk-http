@@ -69,32 +69,30 @@ function runneuraltalk2(modelpath, imagepath, imagecount, imagesfiles, queuename
 			console.log('filename> ' + match[1]);
 			originalfilename = match[1];
 
-		} else {
+		}
 
-			var match = NEURAL_TALK_2_RESUTL_REGEX.exec(data);
-			if (match) {
+		var match = NEURAL_TALK_2_RESUTL_REGEX.exec(data);
+		if (match) {
 
-				console.log('caption> ' + match[2]);
+			console.log('caption> ' + match[2]);
 
-				var sec;
-				var secm = /.*[a-z ]([0-9]*)\.[a-z]*/gi.exec(originalfilename);
-				if (secm && secm.length > 1) sec = parseInt(secm[1]);
+			var sec;
+			var secm = /.*[a-z ]([0-9]*)\.[a-z]*/gi.exec(originalfilename);
+			if (secm && secm.length > 1) sec = parseInt(secm[1]);
 
-				var caption = match[2];
+			var caption = match[2];
 
-				var basefilename = originalfilename.substr(0, originalfilename.length - path.extname(originalfilename).length);
-				var jsonpath = imagepath + '/' + basefilename + '.json';
-				var jsonobj = {
-					sec: sec,
-					filename: originalfilename,
-					caption: caption
-				};
+			var basefilename = originalfilename.substr(0, originalfilename.length - path.extname(originalfilename).length);
+			var jsonpath = imagepath + '/' + basefilename + '.json';
+			var jsonobj = {
+				sec: sec,
+				filename: originalfilename,
+				caption: caption
+			};
 
-				fs.writeFileSync(jsonpath, JSON.stringify(jsonobj));
+			fs.writeFileSync(jsonpath, JSON.stringify(jsonobj));
 
-				results.push({ imagepath: imagepath + originalfilename, jsonpath: jsonpath });
-
-			}
+			results.push({ imagepath: imagepath + originalfilename, jsonpath: jsonpath });
 
 		}
 
