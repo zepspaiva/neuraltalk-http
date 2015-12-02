@@ -14,6 +14,7 @@ var fs = require('fs');
 var path = require('path');
 var spawn = require('child_process').spawn;
 var unzip = require('unzip');
+var fstream = require('fstream');
 
 var PORT = 8080;
 var QUEUE_DIR = './queue';
