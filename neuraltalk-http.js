@@ -274,6 +274,9 @@ app.get('/srt/:foldername', function(req, res) {
 
 	var foldername = req.params.foldername;
 	var filepath = RESULTS_DIR + "/" + foldername + "/subtitles.srt";
+	var filename = foldername + '.srt';
+
+	res.setHeader('Content-disposition', 'attachment; filename=' + filename);
 
 	fs.createReadStream(filepath).pipe(res);
 
