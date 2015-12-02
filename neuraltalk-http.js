@@ -343,6 +343,17 @@ app.get('/srt/:foldername', function(req, res) {
 
 });
 
+app.get('/gif/:foldername', function(req, res) {
+
+	var foldername = req.params.foldername;
+	var filepath = RESULTS_DIR + "/" + foldername + "/animated.gif";
+	var filename = foldername + '.gif';
+
+	res.setHeader('Content-disposition', 'attachment; filename=' + filename);
+	fs.createReadStream(filepath).pipe(res);
+
+});
+
 app.post('/upload', multipartMiddleware, function(req, res) {
 
 	var f = req.body.f;

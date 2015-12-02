@@ -69,10 +69,14 @@
 
 					</div>
 
-					<div class="row" style="padding: 10px; text-align: center">
+					<div id="videodiv" class="row hidden" style="padding: 10px; text-align: center">
 
 						<video id="video" width="640" height="480" autoplay></video>
 						<canvas id="canvas" width="640" height="480" class="hidden"></canvas>
+
+					</div>
+
+					<div id="resultdiv" class="row">
 
 					</div>
 
@@ -212,6 +216,8 @@
 						record = true;
 						records = [];
 
+						$('#videodiv').addClass('hidden');
+
 					} else {
 
 						recordbtn.addClass('btn-primary');
@@ -220,6 +226,7 @@
 						sendImages(records);
 
 						record = false;
+						$('#videodiv').removeClass('hidden');
 
 					}
 
@@ -228,6 +235,14 @@
 				function showStatus(status, message) {
 
 					$('#status').html(message);
+
+				}
+
+				function showImage(image, caption) {
+
+					$('#resultdiv').empty();
+					$('#videodiv').addClass('hidden');
+					$('<img>').attr('src', image).appendTo('#resultdiv');
 
 				}
 
