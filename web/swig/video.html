@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en-us">
+	<head>
+		<meta charset="utf-8">
+		<title>simphony</title>
+		<meta name="description" content="">
+		<meta name="author" content="">
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<!-- #CSS Links -->
+		<!-- Basic Styles -->
+		<link rel="stylesheet" type="text/css" media="screen" href="css/bootstrap.min.css">
+		<link rel="stylesheet" type="text/css" media="screen" href="css/font-awesome.min.css">
+
+		<!-- SmartAdmin Styles : Caution! DO NOT change the order -->
+		<link rel="stylesheet" type="text/css" media="screen" href="css/smartadmin-production-plugins.min.css">
+		<link rel="stylesheet" type="text/css" media="screen" href="css/smartadmin-production.min.css">
+		<link rel="stylesheet" type="text/css" media="screen" href="css/smartadmin-skins.min.css">
+
+		<!-- SmartAdmin RTL Support -->
+		<link rel="stylesheet" type="text/css" media="screen" href="css/simphony.css">
+
+		<!-- We recommend you use "your_style.css" to override SmartAdmin
+		specific styles this will also ensure you retrain your customization with each SmartAdmin update.
+		<link rel="stylesheet" type="text/css" media="screen" href="css/your_style.css"> -->
+
+		<!-- #FAVICONS -->
+		<link rel="shortcut icon" href="img/favicon/favicon.ico" type="image/x-icon">
+		<link rel="icon" href="img/favicon/favicon.ico" type="image/x-icon">
+
+		<!-- #GOOGLE FONT -->
+		<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,300,400,700">
+
+		<!-- #APP SCREEN / ICONS -->
+		<!-- Specifying a Webpage Icon for Web Clip
+		Ref: https://developer.apple.com/library/ios/documentation/AppleApplications/Reference/SafariWebContent/ConfiguringWebApplications/ConfiguringWebApplications.html -->
+		<link rel="apple-touch-icon" href="img/splash/sptouch-icon-iphone.png">
+		<link rel="apple-touch-icon" sizes="76x76" href="img/splash/touch-icon-ipad.png">
+		<link rel="apple-touch-icon" sizes="120x120" href="img/splash/touch-icon-iphone-retina.png">
+		<link rel="apple-touch-icon" sizes="152x152" href="img/splash/touch-icon-ipad-retina.png">
+
+		<!-- iOS web-app metas : hides Safari UI Components and Changes Status Bar Appearance -->
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<!-- Startup image for web apps -->
+		<link rel="apple-touch-startup-image" href="img/splash/ipad-landscape.png" media="screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:landscape)">
+		<link rel="apple-touch-startup-image" href="img/splash/ipad-portrait.png" media="screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:portrait)">
+		<link rel="apple-touch-startup-image" href="img/splash/iphone.png" media="screen and (max-device-width: 320px)">
+
+	</head>
+
+	<body class="smart-style-2">
+
+		<div id="main" role="main" style="margin-left: 10px;">
+
+			<div id="content">
+
+				<section id="widget-grid">
+
+					<div class="row" style="padding: 10px; text-align: center">
+						<button id="recordbtn" class="btn btn-primary" type="button" data-reactid=".4">Gravar</button>
+					</div>
+
+					<div class="row" style="padding: 10px; text-align: center">
+
+						<p id="status"></p>
+
+					</div>
+
+					<div class="row" style="padding: 10px; text-align: center">
+
+						<video id="video" width="640" height="480" autoplay></video>
+						<canvas id="canvas" width="640" height="480" class="hidden"></canvas>
+
+					</div>
+
+				</section>
+
+			</div>
+
+		</div>
+
+		<!--================================================== -->
+
+		<!-- PACE LOADER - turn this on if you want ajax loading to show (caution: uses lots of memory on iDevices)-->
+		<script data-pace-options='{ "restartOnRequestAfter": true }' src="js/plugin/pace/pace.min.js"></script>
+
+		<!-- Link to Google CDN's jQuery + jQueryUI; fall back to local -->
+		<script src="js/libs/jquery-2.1.1.min.js"></script>
+		<script src="js/libs/jquery-ui-1.10.3.min.js"></script>
+
+		<!-- IMPORTANT: APP CONFIG -->
+		<script src="js/app.config.js"></script>
+
+		<!-- JS TOUCH : include this plugin for mobile drag / drop touch events-->
+		<script src="js/plugin/jquery-touch/jquery.ui.touch-punch.min.js"></script> 
+
+		<!-- BOOTSTRAP JS -->
+		<script src="js/bootstrap/bootstrap.min.js"></script>
+
+		<!-- CUSTOM NOTIFICATION -->
+		<script src="js/notification/SmartNotification.min.js"></script>
+
+		<!-- JARVIS WIDGETS -->
+		<script src="js/smartwidgets/jarvis.widget.min.js"></script>
+
+		<!-- EASY PIE CHARTS -->
+		<script src="js/plugin/easy-pie-chart/jquery.easy-pie-chart.min.js"></script>
+
+		<!-- SPARKLINES -->
+		<script src="js/plugin/sparkline/jquery.sparkline.min.js"></script>
+
+		<!-- JQUERY VALIDATE -->
+		<script src="js/plugin/jquery-validate/jquery.validate.min.js"></script>
+
+		<!-- JQUERY MASKED INPUT -->
+		<script src="js/plugin/masked-input/jquery.maskedinput.min.js"></script>
+
+		<!-- JQUERY SELECT2 INPUT -->
+		<script src="js/plugin/select2/select2.min.js"></script>
+
+		<!-- JQUERY UI + Bootstrap Slider -->
+		<script src="js/plugin/bootstrap-slider/bootstrap-slider.min.js"></script>
+
+		<!-- browser msie issue fix -->
+		<script src="js/plugin/msie-fix/jquery.mb.browser.min.js"></script>
+
+		<!-- FastClick: For mobile devices -->
+		<script src="js/plugin/fastclick/fastclick.min.js"></script>
+
+		<script src="js/app.min.js"></script>
+
+		<script src="js/plugin/jqgrid/jquery.jqGrid.min.js"></script>
+		<script src="js/plugin/jqgrid/jQuery.jqGrid.setColWidth.js"></script>
+		<script src="js/plugin/jqgrid/grid.locale-en.min.js"></script>
+
+		<script type="text/javascript">
+
+			$(document).ready(function() {
+
+				pageSetUp();
+
+				var context = null;
+				var record = false;
+				var records = [];
+
+				function setupPhoto() {
+
+					window.addEventListener("DOMContentLoaded", function() {
+						// Grab elements, create settings, etc.
+						var canvas = document.getElementById("canvas"),
+							context = canvas.getContext("2d"),
+							video = document.getElementById("video"),
+							videoObj = { "video": true },
+							errBack = function(error) {
+								console.log("Video capture error: ", error.code);
+							};
+
+						// Put video listeners into place
+						if(navigator.getUserMedia) { // Standard
+							navigator.getUserMedia(videoObj, function(stream) {
+								video.src = stream;
+								video.play();
+							}, errBack);
+						} else if(navigator.webkitGetUserMedia) { // WebKit-prefixed
+							navigator.webkitGetUserMedia(videoObj, function(stream){
+								video.src = window.webkitURL.createObjectURL(stream);
+								video.play();
+							}, errBack);
+						}
+						else if(navigator.mozGetUserMedia) { // Firefox-prefixed
+							navigator.mozGetUserMedia(videoObj, function(stream){
+								video.src = window.URL.createObjectURL(stream);
+								video.play();
+							}, errBack);
+						}
+					}, false);
+					
+					setInterval(function() {
+
+						if (record) {
+
+							var canvas = document.getElementById("canvas"),
+								context = canvas.getContext("2d"),
+								video = document.getElementById("video")
+
+							var w = video.videoWidth;
+	    					var h = video.videoHeight;
+
+							context.drawImage(video, 0, 0, 1280, 960);
+							var base64img = canvas.toDataURL("image/png", 1);
+							context.drawImage(video, 0, 0, 640, 480);
+
+							records.push({ i: records.length+1, base64: canvas.toDataURL() });
+
+						}
+
+					}, 1000);
+						
+				}
+
+				var recordbtn = $('#recordbtn');
+				recordbtn.on('click', function() {
+
+					if (!record) {
+
+						recordbtn.removeClass('btn-primary');
+						recordbtn.addClass('btn-danger');
+
+						record = true;
+						records = [];
+
+					} else {
+
+						recordbtn.addClass('btn-primary');
+						recordbtn.removeClass('btn-danger');
+
+						sendImages(records);
+
+						record = false;
+
+					}
+
+				});
+
+				function showStatus(status, message) {
+
+					$('#status').html(message);
+
+				}
+
+				function sendImages(filesData) {
+
+					var formData = new FormData();
+
+					formData.append('imageData', JSON.stringify(filesData));
+					formData.append('f', '{{f}}');
+
+					$.ajax({
+						type: 'POST',
+						url: '/upload',
+						data: formData,
+						contentType: false,
+						processData: false,
+						success: function (data) {
+							
+							if (data.success) {
+
+								showStatus("sent", "Imagem processada com sucesso!");
+
+							} else {
+
+								showStatus("error", "Imagem recusada pelo servidor.");
+
+							}
+
+						},
+						error: function (data) {
+
+							showStatus("error", "Erro ao conectar com o servidor.");
+
+						}
+					});
+				}
+
+				setupPhoto();
+
+			});
+
+			window.onresize = function(event) {
+			    $("#file-article").height($(window).height() - 100);
+			};
+			$("#file-article").height($(window).height() - 100);
+
+			$(window).on('resize.jqGrid', function() {
+				$("#jqgrid-files").jqGrid('setGridWidth', $("#jqgrid-files-container").width()-10);
+				$("#jqgrid-fields").jqGrid('setGridWidth', $("#jqgrid-fields-container").width()-20);
+				$("#field-image").height($("#jqgrid-fields-container").height());
+			})
+
+		</script>
+
+	</body>
+
+</html>

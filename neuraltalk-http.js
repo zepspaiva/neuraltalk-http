@@ -12,7 +12,9 @@ var session = require('express-session');
 
 var fs = require('fs');
 var path = require('path');
-var spawn = require('child_process').spawn;
+var child_process = require('child_process');
+var spawn = child_process.spawn;
+var execFileSync = child_process.execFileSync;
 const Decompress = require('decompress');
 var fstream = require('fstream');
 
@@ -199,13 +201,9 @@ function generatesrt(folderpath, callback) {
 
 	}
 
-	console.log(subtitles);
-
 	subtitles = subtitles.sort(function(a,b) {
 		return a.sec > b.sec ? 1: -1;
 	});
-
-	console.log(subtitles);
 
 	var subtitlescontent = '';
 	var subi = 0;
@@ -221,6 +219,48 @@ function generatesrt(folderpath, callback) {
 
 	fs.writeFileSync(subtitlepath, subtitlescontent);
 	console.log('Saved ' + subtitlepath);
+
+	if (callback) callback();
+
+}
+
+function generategif(folderpath, callback) {
+
+	var jsonfilenames = fs.readdirSync(folderpath).filter(function(file) {
+		return !fs.statSync(path.join(folderpath, file)).isDirectory() && path.extname(file) === ".json";
+	});
+
+	var subtitlepath = folderpath + '/subtitles.srt';
+	var subtitles = [];
+
+	for (f in jsonfilenames) {
+
+		var jsonobj = JSON.parse(fs.readFileSync(folderpath + "/" + jsonfilenames[f]));
+
+		var subi = parseInt(f) + 1;
+		var start = msToTime(jsonobj.sec*1000);
+		var end = msToTime(jsonobj.sec*1000 + 999);
+		var caption = jsonobj.caption;
+
+		subtitles.push({ sec: jsonobj.sec, start: start, end: end, caption: caption, filename: jsonobj.filename });
+
+	}
+
+	subtitles = subtitles.sort(function(a,b) {
+		return a.sec > b.sec ? 1: -1;
+	});
+
+	for (s in subtitles) {
+
+		var sub = subtitles[s];
+		
+		execFileSync("convert", [sub.filename, '-gravity', 'south', '-stroke', "'#000C'", '-strokewidth', '2', '-annotate', '0', "'Faerie Dragon'", '-pointsize', '30',  '-stroke', 'none', '-fill', 'white', '-annotate', '0', "'Faerie Dragon'", sub.filename], { cwd: folderpath });
+
+	}
+
+	execFileSync("convert", ['-delay', '100', '-loop', '0', '*.jpg', 'animated.gif'], { cwd: folderpath });
+
+	console.log('Saved animated.gif');
 
 	if (callback) callback();
 
@@ -248,7 +288,21 @@ app.use(flash());
 app.get('/', function(req, res) {
 
 	var f = req.query.f
-	res.render('upload.html', { f: f });
+	res.redirect('/image?f=' + f);
+
+});
+
+app.get('/image', function(req, res) {
+
+	var f = req.query.f
+	res.render('image.html', { f: f });
+
+});
+
+app.get('/video', function(req, res) {
+
+	var f = req.query.f
+	res.render('video.html', { f: f });
 
 });
 
@@ -276,9 +330,42 @@ app.get('/srt/:foldername', function(req, res) {
 app.post('/upload', multipartMiddleware, function(req, res) {
 
 	var f = req.body.f;
-	var base64Data = req.body.imageData;
+	var base64Images = req.body.imageData;
 
-	if (base64Data) {
+	if (base64Images) {
+
+		base64Images = JSON.parse(base64Images);
+
+		var folderpath = QUEUE_DIR + "/" + f + "_" + (new Date()).getTime();
+		fs.mkdirSync(folderpath);
+
+		for (b in base64Images) {
+
+			var base64Image = base64Images[b];
+			base64Data = base64Image.base64;
+
+			var base64Header = base64Data.substr(0, base64Data.indexOf("base64,") + "base64,".length);
+			var ext = base64Header.match(/^data:image\/([a-z]+);base64,/)[1];
+			if (ext === "jpeg") ext = "jpg";
+
+			base64Data = base64Data.substr(base64Header.length);
+
+			filepath = folderpath + '/' + b + '.jpg'
+			fs.writeFileSync(filepath, base64Data, 'base64');
+
+		}
+
+		ntfolder(f, folderpath, function(results) {
+
+    		generatesrt(folderpath, function() {
+
+    			res.status(200).send({ success: true, srt: filebasename });
+
+    		});
+
+		});
+
+		/*
 
 		var base64Header = base64Data.substr(0, base64Data.indexOf("base64,") + "base64,".length);
 		var ext = base64Header.match(/^data:image\/([a-z]+);base64,/)[1];
@@ -302,9 +389,11 @@ app.post('/upload', multipartMiddleware, function(req, res) {
 
 			});
 
-		});
+		});*/
 
 	} else {
+
+		return;
 
 		base64Data = req.body.zipData;
 

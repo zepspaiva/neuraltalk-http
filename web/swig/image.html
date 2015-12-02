@@ -254,7 +254,7 @@
 						var shouldResize = (width > maxWidth) || (height > maxHeight);
 
 						if (!shouldResize) {
-							sendFile(dataURL);
+							sendImage(dataURL);
 							return;
 						}
 
@@ -341,9 +341,10 @@
 			}
 
 			function sendImage(fileData) {
+
 				var formData = new FormData();
 
-				formData.append('imageData', fileData);
+				formData.append('imageData', JSON.stringify([{ i: 0, base64: fileData }]));
 				formData.append('f', '{{f}}');
 
 				$.ajax({
