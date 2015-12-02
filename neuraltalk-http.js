@@ -60,9 +60,10 @@ function runneuraltalk2(modelpath, imagepath, imagecount, imagesfiles, queuename
 		}));
 	}
 
-	var proc = spawn("th", args, { cwd: NEURAL_TALK_2_DIR });
-
 	var originalfilename = -1;
+	var results = [];
+
+	var proc = spawn("th", args, { cwd: NEURAL_TALK_2_DIR });
 
 	proc.stdout.on('data', function (data) {
 
@@ -96,6 +97,8 @@ function runneuraltalk2(modelpath, imagepath, imagecount, imagesfiles, queuename
 					caption: caption
 				}));
 
+				results.push({ imagepath: imagepath + originalfilename, jsonpath: jsonpath });
+
 			}
 
 		}
@@ -107,32 +110,8 @@ function runneuraltalk2(modelpath, imagepath, imagecount, imagesfiles, queuename
 	});
 
 	proc.on('close', function(code) {
-	    
-		var queuepath = RESULTS_DIR + "/" + queuename;
-		if (!fs.existsSync(queuepath)) fs.mkdirSync(queuepath);
 
-		var results = [];
-
-		for (var i = 0; i < imagecount; i++) {
-			var jsonpath = imagepath + "/" + i + ".json";
-
-			if (fs.existsSync(jsonpath)) {
-
-				var filename = (new Date()).getTime();
-				var imagefilepath = imagepath + "/" + imagesfiles[i];
-
-				var newjsonpath = queuepath + "/" + filename + ".json";
-				var newimagefilepath = queuepath + "/" + filename + path.extname(imagesfiles[i]);
-
-				fs.renameSync(jsonpath, newjsonpath);
-				fs.renameSync(imagefilepath, newimagefilepath);
-
-				results.push({ imagepath: newimagefilepath, jsonpath: newjsonpath });
-
-			}
-
-		}
-
+		console.log('NEURALTALK END ' + imagepath);
 		if (callback) callback(results);
 
 	});
@@ -172,6 +151,8 @@ function ntfolder(foldername, folderpath, callback) {
 
 		console.log('NEURALTALK END');
 		console.log(results);
+
+		if (callback) callback(results);
 
 	});
 
