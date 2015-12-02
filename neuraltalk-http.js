@@ -104,6 +104,8 @@ function runneuraltalk2(modelpath, imagepath, imagecount, imagesfiles, queuename
 
 	proc.on('close', function(code) {
 
+		if (callback) callback(results);
+/*
 		var returnresults = function() {
 
 			if (results.length == imagesfiles) {
@@ -118,7 +120,7 @@ function runneuraltalk2(modelpath, imagepath, imagecount, imagesfiles, queuename
 
 		};
 
-		returnresults();
+		returnresults();*/
 
 	});
 
