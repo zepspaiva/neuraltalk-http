@@ -238,7 +238,7 @@
 
 				}
 
-				function showImage(image, caption) {
+				function showGif(image) {
 
 					$('#resultdiv').empty();
 					$('#videodiv').addClass('hidden');
@@ -264,6 +264,7 @@
 							if (data.success) {
 
 								showStatus("sent", "Imagem processada com sucesso!");
+								showGif('./gif/' + data.fid);
 
 							} else {
 
