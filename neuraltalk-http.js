@@ -349,7 +349,7 @@ app.get('/srt/:foldername', function(req, res) {
 app.get('/gif/:foldername', function(req, res) {
 
 	var foldername = req.params.foldername;
-	var filepath = RESULTS_DIR + "/" + foldername + "/animated.gif";
+	var filepath = QUEUE_DIR + "/" + foldername + "/animated.gif";
 	var filename = foldername + '.gif';
 
 	res.setHeader('Content-disposition', 'attachment; filename=' + filename);
