@@ -260,7 +260,7 @@ function generategif(folderpath, callback) {
 
 		ext = path.extname(sub.filename);
 
-		var proc = spawn("convert", [sub.filename, '-gravity', 'south', '-stroke', "'#000C'", '-strokewidth', '2', '-annotate', '0', "'Faerie Dragon'", '-pointsize', '30',  '-stroke', 'none', '-fill', 'white', '-annotate', '0', "'Faerie Dragon'", sub.filename], { cwd: folderpath });
+		var proc = spawn("convert", [sub.filename, '-gravity', 'south', '-stroke', "'#000C'", '-strokewidth', '2', '-annotate', '0', '-pointsize', '30', "'" + sub.caption + "'", '-pointsize', '30',  '-stroke', 'none', '-fill', 'white', '-annotate', '0', "'" + sub.caption + "'", sub.filename], { cwd: folderpath });
 
 		proc.on('close', function(code) {
 
