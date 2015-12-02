@@ -65,6 +65,8 @@ function runneuraltalk2(modelpath, imagepath, imagecount, imagesfiles, queuename
 
 		outcount++;
 
+		console.log('DATA> ' + data);
+
 		var match = NEURAL_TALK_2_FILENAME_REGEX.exec(data);
 		if (match) {
 
@@ -183,6 +185,7 @@ function autoorientimage(filepath, callback) {
 }
 
 function msToTime(duration) {
+    
     var milliseconds = parseInt((duration%1000)/100)
         , seconds = parseInt((duration/1000)%60)
         , minutes = parseInt((duration/(1000*60))%60)
@@ -191,8 +194,11 @@ function msToTime(duration) {
     hours = (hours < 10) ? "0" + hours : hours;
     minutes = (minutes < 10) ? "0" + minutes : minutes;
     seconds = (seconds < 10) ? "0" + seconds : seconds;
+    milliseconds = (milliseconds < 10) ? "0" + milliseconds : milliseconds;
+    milliseconds = (milliseconds < 100) ? "0" + milliseconds : milliseconds;
 
     return hours + ":" + minutes + ":" + seconds + "." + milliseconds;
+
 }
 
 function generatesrt(folderpath) {
@@ -212,11 +218,12 @@ function generatesrt(folderpath) {
 
 		var jsonobj = JSON.parse(fs.readFileSync(folderpath + "/" + jsonfilenames[f]));
 
+		var subi = f + 1;
 		var start = msToTime(jsonobj.sec*1000);
 		var end = msToTime(jsonobj.sec*1000 + 999);
 		var caption = jsonobj.caption;
 
-		subtitles += f + '\n' + start + ' --> ' + end + '\n' + caption + '\n\n';
+		subtitles += subi + '\n' + start + ' --> ' + end + '\n' + caption + '\n\n';
 
 	}
 
