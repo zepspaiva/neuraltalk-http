@@ -74,7 +74,7 @@ function runneuraltalk2(modelpath, imagepath, imagecount, imagesfiles, queuename
 		if (match) {
 
 			var sec;
-			var secm = /.*[a-z ]([0-9]*)\.[a-z]*/gi.exec(originalfilename);
+			var secm = /.*([0-9]*)\.[a-z]*/gi.exec(originalfilename);
 			if (secm && secm.length > 1) sec = parseInt(secm[1]);
 
 			var caption = match[2];
@@ -250,15 +250,18 @@ function generategif(folderpath, callback) {
 		return a.sec > b.sec ? 1: -1;
 	});
 
+	var ext = '.jpg';
+
 	for (s in subtitles) {
 
 		var sub = subtitles[s];
-		
+		ext = path.extname(sub.filename);
+
 		execFileSync("convert", [sub.filename, '-gravity', 'south', '-stroke', "'#000C'", '-strokewidth', '2', '-annotate', '0', "'Faerie Dragon'", '-pointsize', '30',  '-stroke', 'none', '-fill', 'white', '-annotate', '0', "'Faerie Dragon'", sub.filename], { cwd: folderpath });
 
 	}
 
-	execFileSync("convert", ['-delay', '100', '-loop', '0', '*.jpg', 'animated.gif'], { cwd: folderpath });
+	execFileSync("convert", ['-delay', '100', '-loop', '0', '*' + ext, 'animated.gif'], { cwd: folderpath });
 
 	console.log('Saved animated.gif');
 
@@ -350,7 +353,7 @@ app.post('/upload', multipartMiddleware, function(req, res) {
 
 			base64Data = base64Data.substr(base64Header.length);
 
-			filepath = folderpath + '/' + b + '.jpg'
+			filepath = folderpath + '/' + b + '.' + ext
 			fs.writeFileSync(filepath, base64Data, 'base64');
 
 		}
