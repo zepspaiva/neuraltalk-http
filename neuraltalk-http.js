@@ -277,7 +277,6 @@ app.get('/srt/:foldername', function(req, res) {
 	var filename = foldername + '.srt';
 
 	res.setHeader('Content-disposition', 'attachment; filename=' + filename);
-
 	fs.createReadStream(filepath).pipe(res);
 
 });
