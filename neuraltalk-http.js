@@ -163,7 +163,7 @@ function ntfolder(foldername, folderpath, callback) {
 
 	console.log(filenames);
 
-	runneuraltalk2(NEURAL_TALK_2_MODEL_FILE, folderpath, 1, filenames, folderpath, NEURAL_TALK_2_USE_GPU, function(results) {
+	runneuraltalk2(NEURAL_TALK_2_MODEL_FILE, folderpath, 1, filenames, foldername, NEURAL_TALK_2_USE_GPU, function(results) {
 
 		console.log('NEURALTALK END');
 		console.log(results);
@@ -285,9 +285,9 @@ app.post('/upload', multipartMiddleware, function(req, res) {
 
 				ntfolder(f, unzippath, function() {
 
+					res.status(200).send({ success: true });
+					
 				});
-
-				res.status(200).send({ success: true });
 
 			});
 
