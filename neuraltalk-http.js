@@ -111,9 +111,6 @@ function runneuraltalk2(modelpath, imagepath, imagecount, imagesfiles, queuename
 
 		var returnresults = function() {
 
-			console.log('NEURALTALK END ' + imagepath);
-			console.log(results);
-
 			if (outcount == 0) {
 
 				if (callback) callback(results);
@@ -187,6 +184,19 @@ function autoorientimage(filepath, callback) {
 
 }
 
+function msToTime(duration) {
+    var milliseconds = parseInt((duration%1000)/100)
+        , seconds = parseInt((duration/1000)%60)
+        , minutes = parseInt((duration/(1000*60))%60)
+        , hours = parseInt((duration/(1000*60*60))%24);
+
+    hours = (hours < 10) ? "0" + hours : hours;
+    minutes = (minutes < 10) ? "0" + minutes : minutes;
+    seconds = (seconds < 10) ? "0" + seconds : seconds;
+
+    return hours + ":" + minutes + ":" + seconds + "." + milliseconds;
+}
+
 function generatesrt(folderpath) {
 
 	var jsonfilenames = fs.readdirSync(folderpath).filter(function(file) {
@@ -197,16 +207,22 @@ function generatesrt(folderpath) {
 	    return a.sec > b.sec;
 	});
 
-	var subtitles = [];
+	var subtitlepath = folderpath + '/subtitles.srt';
+	var subtitles = '';
 
 	for (f in jsonfilenames) {
 
 		var jsonobj = JSON.parse(fs.readFileSync(folderpath + "/" + jsonfilenames[f]));
-		subtitles.push({ sec: jsonobj.sec, text: jsonobj.caption });
+
+		var start = msToTime(jsonobj.sec*1000);
+		var end = msToTime(jsonobj.sec*1000 + 999);
+		var caption = jsonobj.caption;
+
+		sutitles += f + '\n' + start + ' --> ' + end + '\n' + caption + '\n\n';
 
 	}
 
-	console.log(subtitles);
+	fs.writeFileSync(subtitlepath, subtitles);
 
 }
 
