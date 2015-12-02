@@ -201,7 +201,7 @@ function msToTime(duration) {
 
 }
 
-function generatesrt(folderpath) {
+function generatesrt(folderpath, callback) {
 
 	var jsonfilenames = fs.readdirSync(folderpath).filter(function(file) {
 		return !fs.statSync(path.join(folderpath, file)).isDirectory() && path.extname(file) === ".json";
@@ -229,6 +229,8 @@ function generatesrt(folderpath) {
 
 	fs.writeFileSync(subtitlepath, subtitles);
 	console.log('Saved ' + subtitlepath);
+
+	if (callback) callback();
 
 }
 
@@ -263,6 +265,15 @@ app.get('/img/:foldername/:filename', function(req, res) {
 	var foldername = req.params.foldername;
 	var filename = req.params.filename;
 	var filepath = RESULTS_DIR + "/" + foldername + "/" + filename;
+
+	fs.createReadStream(filepath).pipe(res);
+
+});
+
+app.get('/srt/:foldername', function(req, res) {
+
+	var foldername = req.params.foldername;
+	var filepath = RESULTS_DIR + "/" + foldername + "/subtitles.srt";
 
 	fs.createReadStream(filepath).pipe(res);
 
