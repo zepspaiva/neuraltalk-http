@@ -61,6 +61,8 @@ function runneuraltalk2(modelpath, imagepath, imagecount, imagesfiles, queuename
 
 	proc.stdout.on('data', function (data) {
 
+		console.log('DATA> ' + data);
+
 		var match = NEURAL_TALK_2_FILENAME_REGEX.exec(data);
 		if (match) {
 
@@ -84,8 +86,6 @@ function runneuraltalk2(modelpath, imagepath, imagecount, imagesfiles, queuename
 					filename: originalfilename,
 					caption: caption
 				};
-
-				console.log(jsonobj);
 
 				fs.writeFileSync(jsonpath, JSON.stringify(jsonobj));
 
@@ -181,7 +181,7 @@ function generatesrt(folderpath) {
 
 	for (f in jsonfilenames) {
 
-		var jsonobj = JSON.parse(fs.readFileSync(folderpath + "/" + jsonfilenames));
+		var jsonobj = JSON.parse(fs.readFileSync(folderpath + "/" + jsonfilenames[f]));
 		subtitles.push({ sec: jsonobj.sec, text: jsonobj.caption });
 
 	}
@@ -190,7 +190,7 @@ function generatesrt(folderpath) {
 
 }
 
-// === t
+// ===
 
 app.use(morgan('dev'));
 app.use(cookieParser());
