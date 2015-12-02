@@ -73,12 +73,17 @@ function runneuraltalk2(modelpath, imagepath, imagecount, imagesfiles, queuename
 			var match = NEURAL_TALK_2_RESUTL_REGEX.exec(data);
 			if (match) {
 
+				var sec;
+				var secm = /.*[a-z ]([0-9]*)\.[a-z]*/gi.exec(originalfilename);
+				if (secm && secm.length > 1) sec = parseInt(secm[1]);
+
 				var caption = match[2];
 
 				var basefilename = originalfilename.substr(0, originalfilename.length - path.extname(originalfilename).length);
 				var jsonpath = imagepath + '/' + basefilename + '.json';
 
 				fs.writeFileSync(jsonpath, JSON.stringify({
+					sec: sec,
 					filename: originalfilename,
 					caption: caption
 				}));
@@ -135,9 +140,6 @@ function ntfolder(foldername, folderpath, callback) {
 
 	runneuraltalk2(NEURAL_TALK_2_MODEL_FILE, folderpath, filenames.length, filenames, foldername, NEURAL_TALK_2_USE_GPU, function(results) {
 
-		console.log('NEURALTALK END');
-		console.log(results);
-
 		if (callback) callback(results);
 
 	});
@@ -162,7 +164,30 @@ function autoorientimage(filepath, callback) {
 
 }
 
-// ===
+function generatesrt(folderpath) {
+
+	var jsonfilenames = fs.readdirSync(folderpath).filter(function(file) {
+		return !fs.statSync(path.join(folderpath, file)).isDirectory() && path.extname(file) === ".json";
+	});
+
+	jsonfilenames = jsonfilenames.sort(function(a,b) {
+	    return a.sec > b.sec;
+	});
+
+	var subtitles = [];
+
+	for (f in jsonfilenames) {
+
+		var jsonobj = JSON.parse(fs.readFileSync(folderpath + "/" + jsonfilenames));
+		subtitles.push({ sec: jsonobj.sec, text: jsonobj.caption });
+
+	}
+
+	console.log(subtitles);
+
+}
+
+// === t
 
 app.use(morgan('dev'));
 app.use(cookieParser());
@@ -221,7 +246,6 @@ app.post('/upload', multipartMiddleware, function(req, res) {
 				autoorientimage(imagefilepath, function() {
 
 					var resultobj = JSON.parse(fs.readFileSync(jsonfilepath));
-
 					res.status(200).send({ success: true, image: imagefilepath.substr(RESULTS_DIR.length), caption: resultobj.caption });
 					
 				});
@@ -254,9 +278,13 @@ app.post('/upload', multipartMiddleware, function(req, res) {
 				    .use(Decompress.zip({ strip: 1 }))
 				    .run(function() {
 
-				    	ntfolder(f, unzippath, function() {
+				    	ntfolder(f, unzippath, function(results) {
 
-							res.status(200).send({ success: true });
+				    		generatesrt(unzippath, function() {
+
+				    			res.status(200).send({ success: true, srt: filebasename });
+
+				    		});
 
 						});
 
