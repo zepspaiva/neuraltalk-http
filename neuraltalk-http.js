@@ -207,12 +207,8 @@ function generatesrt(folderpath, callback) {
 		return !fs.statSync(path.join(folderpath, file)).isDirectory() && path.extname(file) === ".json";
 	});
 
-	jsonfilenames = jsonfilenames.sort(function(a,b) {
-	    return a.sec > b.sec;
-	});
-
 	var subtitlepath = folderpath + '/subtitles.srt';
-	var subtitles = '';
+	var subtitles = [];
 
 	for (f in jsonfilenames) {
 
@@ -223,11 +219,27 @@ function generatesrt(folderpath, callback) {
 		var end = msToTime(jsonobj.sec*1000 + 999);
 		var caption = jsonobj.caption;
 
-		subtitles += subi + '\n' + start + ' --> ' + end + '\n' + caption + '\n\n';
+		subtitles.push({ sec: jsonobj.sec, start: start, end: end, caption: caption });
 
 	}
 
-	fs.writeFileSync(subtitlepath, subtitles);
+	subtitles = subtitles.sort(function(a,b) {
+	    return a.sec > b.sec;
+	});
+
+	var subtitlescontent = '';
+	var subi = 0;
+
+	for (s in subtitles) {
+
+		var subtitle = subtitles[s];
+		subi++;
+
+		subtitlescontent += subi + '\n' + subtitle.start + ' --> ' + subtitle.end + '\n' + subtitle.caption + '\n\n';
+
+	}
+
+	fs.writeFileSync(subtitlepath, subtitlescontent);
 	console.log('Saved ' + subtitlepath);
 
 	if (callback) callback();
