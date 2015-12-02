@@ -282,13 +282,15 @@ app.post('/upload', multipartMiddleware, function(req, res) {
 				    .src(filepath)
 				    .dest(unzippath)
 				    .use(Decompress.zip({ strip: 1 }))
-				    .run();
+				    .run(function() {
 
-				ntfolder(f, unzippath, function() {
+				    	ntfolder(f, unzippath, function() {
 
-					res.status(200).send({ success: true });
+							res.status(200).send({ success: true });
 
-				});
+						});
+
+				    });
 
 			});
 
