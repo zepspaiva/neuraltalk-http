@@ -59,7 +59,11 @@ function runneuraltalk2(modelpath, imagepath, imagecount, imagesfiles, queuename
 
 	var proc = spawn("th", args, { cwd: NEURAL_TALK_2_DIR });
 
+	var outcount = 0;
+
 	proc.stdout.on('data', function (data) {
+
+		outcount++;
 
 		console.log('DATA> ' + data);
 
@@ -95,6 +99,8 @@ function runneuraltalk2(modelpath, imagepath, imagecount, imagesfiles, queuename
 
 		}
 
+		outcount--;
+
 	});
 
 	proc.stderr.on('data', function (data) {
@@ -103,10 +109,24 @@ function runneuraltalk2(modelpath, imagepath, imagecount, imagesfiles, queuename
 
 	proc.on('close', function(code) {
 
-		console.log('NEURALTALK END ' + imagepath);
-		console.log(results);
+		var returnresults = function() {
 
-		if (callback) callback(results);
+			console.log('NEURALTALK END ' + imagepath);
+			console.log(results);
+
+			if (outcount == 0) {
+
+				if (callback) callback(results);
+
+			} else {
+
+				setTimeout(returnresults, 100);
+
+			}
+
+		};
+
+		returnresults();
 
 	});
 
