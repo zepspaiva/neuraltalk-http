@@ -80,7 +80,11 @@ function runneuraltalk2(modelpath, imagepath, imagecount, imagesfiles, queuename
 				var caption = match[2];
 				i--;
 
-				fs.writeFile(imagepath + '/' + i + '.json', JSON.stringify({
+				var jsonpath = imagepath + '/' + i + '.json';
+
+				console.log(jsonpath);
+
+				fs.writeFile(jsonpath, JSON.stringify({
 					filename: originalfilename,
 					caption: caption
 				}));
@@ -157,9 +161,12 @@ function ntfolder(foldername, folderpath, callback) {
 		return !fs.statSync(path.join(folderpath, file)).isDirectory();
 	});
 
+	console.log(filenames);
+
 	runneuraltalk2(NEURAL_TALK_2_MODEL_FILE, folderpath, 1, filenames, folderpath, NEURAL_TALK_2_USE_GPU, function(results) {
 
-		
+		console.log('NEURALTALK END');
+		console.log(results);
 
 	});
 
