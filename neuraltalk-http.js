@@ -66,6 +66,8 @@ function runneuraltalk2(modelpath, imagepath, imagecount, imagesfiles, queuename
 
 	proc.stdout.on('data', function (data) {
 
+		console.log("DATA> " + data);
+
 		var match = NEURAL_TALK_2_FILENAME_REGEX.exec(data);
 		if (match) {
 
@@ -79,11 +81,15 @@ function runneuraltalk2(modelpath, imagepath, imagecount, imagesfiles, queuename
 			if (match) {
 
 				console.log("CAPTION> " + match[2]);
+				console.log("OFILENAME> " + originalfilename);
 
 				var caption = match[2];
 
 				var basefilename = originalfilename.substr(0, originalfilename.length - path.extname(originalfilename).length);
 				var jsonpath = imagepath + '/' + basefilename + '.json';
+
+				console.log("basefilename> " + basefilename);
+				console.log("jsonpath> " + jsonpath);
 
 				fs.writeFileSync(jsonpath, JSON.stringify({
 					filename: originalfilename,
