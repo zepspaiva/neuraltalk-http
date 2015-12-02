@@ -65,8 +65,6 @@ function runneuraltalk2(modelpath, imagepath, imagecount, imagesfiles, queuename
 
 		outcount++;
 
-		console.log('DATA> ' + data);
-
 		var match = NEURAL_TALK_2_FILENAME_REGEX.exec(data);
 		if (match) {
 
@@ -218,11 +216,12 @@ function generatesrt(folderpath) {
 		var end = msToTime(jsonobj.sec*1000 + 999);
 		var caption = jsonobj.caption;
 
-		sutitles += f + '\n' + start + ' --> ' + end + '\n' + caption + '\n\n';
+		subtitles += f + '\n' + start + ' --> ' + end + '\n' + caption + '\n\n';
 
 	}
 
 	fs.writeFileSync(subtitlepath, subtitles);
+	console.log('Saved ' + subtitlepath);
 
 }
 
