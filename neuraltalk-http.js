@@ -54,12 +54,6 @@ function runneuraltalk2(modelpath, imagepath, imagecount, imagesfiles, queuename
 	for (g in gpuarg)
 		args.push(gpuarg[g]);
 
-	for (i in imagesfiles) {
-		fs.writeFile(imagepath + '/' + i + '.json', JSON.stringify({
-			caption: ''
-		}));
-	}
-
 	var originalfilename = -1;
 	var results = [];
 
@@ -74,23 +68,15 @@ function runneuraltalk2(modelpath, imagepath, imagecount, imagesfiles, queuename
 
 			originalfilename = match[1];
 
-			console.log("FILENAME> " + match[1]);
-
 		} else {
 
 			var match = NEURAL_TALK_2_RESUTL_REGEX.exec(data);
 			if (match) {
 
-				console.log("CAPTION> " + match[2]);
-				console.log("OFILENAME> " + originalfilename);
-
 				var caption = match[2];
 
 				var basefilename = originalfilename.substr(0, originalfilename.length - path.extname(originalfilename).length);
 				var jsonpath = imagepath + '/' + basefilename + '.json';
-
-				console.log("basefilename> " + basefilename);
-				console.log("jsonpath> " + jsonpath);
 
 				fs.writeFileSync(jsonpath, JSON.stringify({
 					filename: originalfilename,
@@ -147,7 +133,7 @@ function ntfolder(foldername, folderpath, callback) {
 		return !fs.statSync(path.join(folderpath, file)).isDirectory();
 	});
 
-	runneuraltalk2(NEURAL_TALK_2_MODEL_FILE, folderpath, 1, filenames, foldername, NEURAL_TALK_2_USE_GPU, function(results) {
+	runneuraltalk2(NEURAL_TALK_2_MODEL_FILE, folderpath, filenames.length, filenames, foldername, NEURAL_TALK_2_USE_GPU, function(results) {
 
 		console.log('NEURALTALK END');
 		console.log(results);
