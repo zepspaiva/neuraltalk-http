@@ -157,10 +157,7 @@ function ntfolder(foldername, folderpath, callback) {
 		return !fs.statSync(path.join(folderpath, file)).isDirectory();
 	});
 
-	var tempfoldername = foldername + "_" + (new Date()).getTime();
-	var tempfolder = QUEUE_DIR + "/" + tempfoldername;
-
-	runneuraltalk2(NEURAL_TALK_2_MODEL_FILE, tempfolder, 1, filenames, folderpath, NEURAL_TALK_2_USE_GPU, function(results) {
+	runneuraltalk2(NEURAL_TALK_2_MODEL_FILE, folderpath, 1, filenames, folderpath, NEURAL_TALK_2_USE_GPU, function(results) {
 
 		
 
