@@ -24,6 +24,8 @@ var NEURAL_TALK_2_DIR = '../neuraltalk2';
 var NEURAL_TALK_2_DIR_BACK = '../neuraltalk-http/';
 var NEURAL_TALK_2_MODEL_FILE = 'model_id1-501-1448236541.t7_cpu.t7';
 var NEURAL_TALK_2_USE_GPU = false;
+
+var NEURAL_TALK_2_FILENAME_REGEX = /cp.*\/(.*)\".*\/img([0-9]*)\.jpg/gi;
 var NEURAL_TALK_2_RESUTL_REGEX = /image\s([0-9]*)\:\s([a-z ]*)/gi;
 
 if (!fs.existsSync(QUEUE_DIR)) fs.mkdirSync(QUEUE_DIR);
@@ -52,26 +54,41 @@ function runneuraltalk2(modelpath, imagepath, imagecount, imagesfiles, queuename
 	for (g in gpuarg)
 		args.push(gpuarg[g]);
 
-	fs.writeFile(imagepath + '/0.json', JSON.stringify({
-		caption: 'Undefined.'
-	}));
+	for (i in imagesfiles) {
+		fs.writeFile(imagepath + '/' + i + '.json', JSON.stringify({
+			caption: ''
+		}));
+	}
 
 	var proc = spawn("th", args, { cwd: NEURAL_TALK_2_DIR });
 
+	var originalfilename = -1;
+
 	proc.stdout.on('data', function (data) {
 
-		var match = NEURAL_TALK_2_RESUTL_REGEX.exec(data);
+		var match = NEURAL_TALK_2_FILENAME_REGEX.exec(data);
 		if (match) {
 
-			var i = parseInt(match[1]);
-			var caption = match[2];
-			i--;
+			originalfilename = parseInt(match[1]);
 
-			fs.writeFile(imagepath + '/' + i + '.json', JSON.stringify({
-				caption: caption
-			}));
+		} else {
+
+			var match = NEURAL_TALK_2_RESUTL_REGEX.exec(data);
+			if (match) {
+
+				var i = parseInt(match[1]);
+				var caption = match[2];
+				i--;
+
+				fs.writeFile(imagepath + '/' + i + '.json', JSON.stringify({
+					filename: originalfilename,
+					caption: caption
+				}));
+
+			}
 
 		}
+
 	});
 
 	proc.stderr.on('data', function (data) {
@@ -82,6 +99,8 @@ function runneuraltalk2(modelpath, imagepath, imagecount, imagesfiles, queuename
 	    
 		var queuepath = RESULTS_DIR + "/" + queuename;
 		if (!fs.existsSync(queuepath)) fs.mkdirSync(queuepath);
+
+		var results = [];
 
 		for (var i = 0; i < imagecount; i++) {
 			var jsonpath = imagepath + "/" + i + ".json";
@@ -97,11 +116,13 @@ function runneuraltalk2(modelpath, imagepath, imagecount, imagesfiles, queuename
 				fs.renameSync(jsonpath, newjsonpath);
 				fs.renameSync(imagefilepath, newimagefilepath);
 
-				if (callback) callback(newimagefilepath, newjsonpath);
+				results.push({ imagepath: newimagefilepath, jsonpath: newjsonpath });
 
 			}
 
 		}
+
+		if (callback) callback(results);
 
 	});
 
@@ -117,9 +138,31 @@ function ntstandalone(foldername, filepath, callback) {
 	fs.mkdirSync(tempfolder);
 	fs.renameSync(filepath, tempimgpath);
 
-	runneuraltalk2(NEURAL_TALK_2_MODEL_FILE, tempfolder, 1, [filename], foldername, NEURAL_TALK_2_USE_GPU, function(imagefilepath, jsonfilepath) {
+	runneuraltalk2(NEURAL_TALK_2_MODEL_FILE, tempfolder, 1, [filename], foldername, NEURAL_TALK_2_USE_GPU, function(results) {
 
-		if (callback) callback(imagefilepath, jsonfilepath);
+		if (results.length > 0) {
+
+			var result0 = results[0];
+			if (callback) callback(result0.imagepath, result0.jsonpath);
+
+		}
+
+	});
+
+}
+
+function ntfolder(foldername, folderpath, callback) {
+
+	var filenames = fs.readdirSync(folderpath).filter(function(file) {
+		return !fs.statSync(path.join(folderpath, file)).isDirectory();
+	});
+
+	var tempfoldername = foldername + "_" + (new Date()).getTime();
+	var tempfolder = QUEUE_DIR + "/" + tempfoldername;
+
+	runneuraltalk2(NEURAL_TALK_2_MODEL_FILE, tempfolder, 1, filenames, folderpath, NEURAL_TALK_2_USE_GPU, function(results) {
+
+		
 
 	});
 
@@ -235,6 +278,10 @@ app.post('/upload', multipartMiddleware, function(req, res) {
 				    .dest(unzippath)
 				    .use(Decompress.zip({ strip: 1 }))
 				    .run();
+
+				ntfolder(f, unzippath, function() {
+
+				});
 
 				res.status(200).send({ success: true });
 
