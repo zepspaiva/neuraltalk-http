@@ -66,15 +66,22 @@ function runneuraltalk2(modelpath, imagepath, imagecount, imagesfiles, queuename
 
 	proc.stdout.on('data', function (data) {
 
+		console.log("DATA> " + data);
+
 		var match = NEURAL_TALK_2_FILENAME_REGEX.exec(data);
 		if (match) {
 
 			originalfilename = parseInt(match[1]);
 
+			console.log("FILENAME> " + match[1]);
+
 		} else {
 
 			var match = NEURAL_TALK_2_RESUTL_REGEX.exec(data);
 			if (match) {
+
+				console.log("FILE I> " + match[1]);
+				console.log("CAPTION> " + match[1]);
 
 				var i = parseInt(match[1]);
 				var caption = match[2];
@@ -157,13 +164,9 @@ function ntstandalone(foldername, filepath, callback) {
 
 function ntfolder(foldername, folderpath, callback) {
 
-	console.log(folderpath);
 	var filenames = fs.readdirSync(folderpath).filter(function(file) {
-		console.log(file);
 		return !fs.statSync(path.join(folderpath, file)).isDirectory();
 	});
-
-	console.log(filenames);
 
 	runneuraltalk2(NEURAL_TALK_2_MODEL_FILE, folderpath, 1, filenames, foldername, NEURAL_TALK_2_USE_GPU, function(results) {
 
