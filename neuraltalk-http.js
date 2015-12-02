@@ -13,7 +13,7 @@ var session = require('express-session');
 var fs = require('fs');
 var path = require('path');
 var spawn = require('child_process').spawn;
-var unzip = require('unzip');
+const Decompress = require('decompress');
 var fstream = require('fstream');
 
 var PORT = 8080;
@@ -230,12 +230,11 @@ app.post('/upload', multipartMiddleware, function(req, res) {
 				var unzippath = RESULTS_DIR + "/" + filebasename;
 				fs.mkdirSync(unzippath);
 
-				var readStream = fs.createReadStream(filepath);
-				var writeStream = fstream.Writer(unzippath);
-				 
-				readStream
-				  .pipe(unzip.Parse())
-				  .pipe(writeStream)
+				new Decompress({mode: '755'})
+				    .src(filepath)
+				    .dest(unzippath)
+				    .use(Decompress.zip({ strip: 1 }))
+				    .run();
 
 				res.status(200).send({ success: true });
 
