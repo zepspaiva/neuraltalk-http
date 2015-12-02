@@ -18,6 +18,8 @@ var execFileSync = child_process.execFileSync;
 const Decompress = require('decompress');
 var fstream = require('fstream');
 
+var async = require('async');
+
 var PORT = 8080;
 var QUEUE_DIR = './queue';
 var RESULTS_DIR = './results';
@@ -252,20 +254,31 @@ function generategif(folderpath, callback) {
 
 	var ext = '.jpg';
 
-	for (s in subtitles) {
 
-		var sub = subtitles[s];
+	async.mapSeries(subtitles, function(sub, callback) {
+
 		ext = path.extname(sub.filename);
 
-		execFileSync("convert", [sub.filename, '-gravity', 'south', '-stroke', "'#000C'", '-strokewidth', '2', '-annotate', '0', "'Faerie Dragon'", '-pointsize', '30',  '-stroke', 'none', '-fill', 'white', '-annotate', '0', "'Faerie Dragon'", sub.filename], { cwd: folderpath });
+		var proc = spawn("convert", [sub.filename, '-gravity', 'south', '-stroke', "'#000C'", '-strokewidth', '2', '-annotate', '0', "'Faerie Dragon'", '-pointsize', '30',  '-stroke', 'none', '-fill', 'white', '-annotate', '0', "'Faerie Dragon'", sub.filename], { cwd: folderpath });
 
-	}
+		proc.on('close', function(code) {
 
-	execFileSync("convert", ['-delay', '100', '-loop', '0', '*' + ext, 'animated.gif'], { cwd: folderpath });
+			callback();
 
-	console.log('Saved animated.gif');
+		});
 
-	if (callback) callback();
+	}, function() {
+
+		var proc = spawn("convert", ['-delay', '100', '-loop', '0', '*' + ext, 'animated.gif'], { cwd: folderpath });
+
+		proc.on('close', function(code) {
+
+			console.log('Saved animated.gif');
+			if (callback) callback();
+
+		});
+
+	});
 
 }
 
