@@ -74,7 +74,7 @@ function runneuraltalk2(modelpath, imagepath, imagecount, imagesfiles, queuename
 		if (match) {
 
 			var sec;
-			var secm = /.*([0-9]*)\.[a-z]*/gi.exec(originalfilename);
+			var secm = /([0-9]*)\.[a-z]*/gi.exec(originalfilename);
 			if (secm && secm.length > 1) sec = parseInt(secm[1]);
 
 			var caption = match[2];
@@ -362,7 +362,11 @@ app.post('/upload', multipartMiddleware, function(req, res) {
 
     		generatesrt(folderpath, function() {
 
-    			res.status(200).send({ success: true, srt: filebasename });
+    			generategif(folderpath, function() {
+
+    				res.status(200).send({ success: true, fid: filebasename });
+
+    			});
 
     		});
 
