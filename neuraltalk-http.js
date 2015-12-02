@@ -81,17 +81,16 @@ function runneuraltalk2(modelpath, imagepath, imagecount, imagesfiles, queuename
 			if (match) {
 
 				console.log("FILE I> " + match[1]);
-				console.log("CAPTION> " + match[1]);
+				console.log("CAPTION> " + match[2]);
 
 				var i = parseInt(match[1]);
 				var caption = match[2];
 				i--;
 
-				var jsonpath = imagepath + '/' + i + '.json';
+				var basefilename = originalfilename.substr(0, originalfilename.length - path.extname(originalfilename).length);
+				var jsonpath = imagepath + '/' + basefilename + '.json';
 
-				console.log(jsonpath);
-
-				fs.writeFile(jsonpath, JSON.stringify({
+				fs.writeFileSync(jsonpath, JSON.stringify({
 					filename: originalfilename,
 					caption: caption
 				}));
