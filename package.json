@@ -14,7 +14,8 @@
     "express-session": "^1.12.1",
     "fstream": "^1.0.8",
     "morgan": "^1.6.1",
-    "swig": "^1.4.2"
+    "swig": "^1.4.2",
+    "uuid": "^2.0.1"
   },
   "devDependencies": {},
   "scripts": {

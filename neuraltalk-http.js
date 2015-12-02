@@ -19,6 +19,7 @@ const Decompress = require('decompress');
 var fstream = require('fstream');
 
 var async = require('async');
+var uuid = require('uuid');
 
 var PORT = 8080;
 var QUEUE_DIR = './queue';
@@ -303,7 +304,9 @@ app.use(flash());
 
 app.get('/', function(req, res) {
 
-	var f = req.query.f
+	var f = req.query.f;
+	if (!f) f = uuid.v4()).replace(/\\/g, '');
+
 	res.redirect('/image?f=' + f);
 
 });
@@ -363,7 +366,7 @@ app.post('/upload', multipartMiddleware, function(req, res) {
 
 		base64Images = JSON.parse(base64Images);
 
-		var folderid =  + f + "_" + (new Date()).getTime();
+		var folderid = f + "_" + (new Date()).getTime();
 
 		var folderpath = QUEUE_DIR + "/" + folderid;
 		fs.mkdirSync(folderpath);
