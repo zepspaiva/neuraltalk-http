@@ -61,15 +61,20 @@ function runneuraltalk2(modelpath, imagepath, imagecount, imagesfiles, queuename
 
 	proc.stdout.on('data', function (data) {
 
+		console.log('DATA> ' + data);
+
 		var match = NEURAL_TALK_2_FILENAME_REGEX.exec(data);
 		if (match) {
 
+			console.log('filename> ' + match[1]);
 			originalfilename = match[1];
 
 		} else {
 
 			var match = NEURAL_TALK_2_RESUTL_REGEX.exec(data);
 			if (match) {
+
+				console.log('caption> ' + match[2]);
 
 				var sec;
 				var secm = /.*[a-z ]([0-9]*)\.[a-z]*/gi.exec(originalfilename);
