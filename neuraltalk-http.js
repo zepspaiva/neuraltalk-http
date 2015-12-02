@@ -186,7 +186,7 @@ function autoorientimage(filepath, callback) {
 
 function msToTime(duration) {
     
-    var milliseconds = parseInt((duration%1000)/100)
+    var milliseconds = parseInt((duration%1000))
         , seconds = parseInt((duration/1000)%60)
         , minutes = parseInt((duration/(1000*60))%60)
         , hours = parseInt((duration/(1000*60*60))%24);
@@ -218,7 +218,7 @@ function generatesrt(folderpath) {
 
 		var jsonobj = JSON.parse(fs.readFileSync(folderpath + "/" + jsonfilenames[f]));
 
-		var subi = f + 1;
+		var subi = parseInt(f) + 1;
 		var start = msToTime(jsonobj.sec*1000);
 		var end = msToTime(jsonobj.sec*1000 + 999);
 		var caption = jsonobj.caption;
