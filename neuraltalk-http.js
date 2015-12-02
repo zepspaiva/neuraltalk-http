@@ -13,6 +13,7 @@ var session = require('express-session');
 var fs = require('fs');
 var path = require('path');
 var spawn = require('child_process').spawn;
+var unzip = require('unzip');
 
 var PORT = 8080;
 var QUEUE_DIR = './queue';
@@ -219,12 +220,21 @@ app.post('/upload', multipartMiddleware, function(req, res) {
 			var base64Header = base64Data.substr(0, base64Data.indexOf("base64,") + "base64,".length);
 			base64Data = base64Data.substr(base64Header.length);
 			
-			var filepath = QUEUE_DIR + "/" + f + "_" + (new Date()).getTime() + ".zip";
+			var filebasename = f + "_" + (new Date()).getTime();
+			var filepath = QUEUE_DIR + "/" + filebasename + ".zip";
 
 			fs.writeFile(filepath, base64Data, 'base64', function(err) {
 				if (err) res.status(200).send({ success: false });
 				
+				var unzippath = RESULTS_DIR + "/" + filebasename;
+				fs.mkdirSync(unzippath);
 
+				var readStream = fs.createReadStream(filepath);
+				var writeStream = fstream.Writer(unzippath);
+				 
+				readStream
+				  .pipe(unzip.Parse())
+				  .pipe(writeStream)
 
 				res.status(200).send({ success: true });
 
