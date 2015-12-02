@@ -363,7 +363,9 @@ app.post('/upload', multipartMiddleware, function(req, res) {
 
 		base64Images = JSON.parse(base64Images);
 
-		var folderpath = QUEUE_DIR + "/" + f + "_" + (new Date()).getTime();
+		var folderid =  + f + "_" + (new Date()).getTime();
+
+		var folderpath = QUEUE_DIR + "/" + folderid;
 		fs.mkdirSync(folderpath);
 
 		for (b in base64Images) {
@@ -388,7 +390,7 @@ app.post('/upload', multipartMiddleware, function(req, res) {
 
     			generategif(folderpath, function() {
 
-    				res.status(200).send({ success: true, fid: filebasename });
+    				res.status(200).send({ success: true, fid: folderid });
 
     			});
 
@@ -422,7 +424,7 @@ app.post('/upload', multipartMiddleware, function(req, res) {
 
 		});*/
 
-	} else {
+	}/* else {
 
 		return;
 
@@ -464,7 +466,7 @@ app.post('/upload', multipartMiddleware, function(req, res) {
 
 		}
 
-	}
+	}*/
 
 });
 
