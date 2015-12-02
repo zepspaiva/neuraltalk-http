@@ -305,7 +305,7 @@ app.use(flash());
 app.get('/', function(req, res) {
 
 	var f = req.query.f;
-	if (!f) f = uuid.v4()).replace(/\\/g, '');
+	if (!f) f = uuid.v4().replace(/\\/g, '');
 
 	res.redirect('/image?f=' + f);
 
