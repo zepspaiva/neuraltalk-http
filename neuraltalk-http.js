@@ -25,8 +25,8 @@ var NEURAL_TALK_2_DIR_BACK = '../neuraltalk-http/';
 var NEURAL_TALK_2_MODEL_FILE = 'model_id1-501-1448236541.t7_cpu.t7';
 var NEURAL_TALK_2_USE_GPU = false;
 
-var NEURAL_TALK_2_FILENAME_REGEX = /cp.*\/(.*)\".*\/img([0-9]*)\.jpg/gi;
-var NEURAL_TALK_2_RESUTL_REGEX = /image\s([0-9]*)\:\s([a-z ]*)/gi;
+var NEURAL_TALK_2_FILENAME_REGEX = /cp.*\/(.*)\".*\/img([0-9]*)\.jpg.*/gi;
+var NEURAL_TALK_2_RESUTL_REGEX = /image\s([0-9]*)\:\s([a-z ]*).*/gi;
 
 if (!fs.existsSync(QUEUE_DIR)) fs.mkdirSync(QUEUE_DIR);
 if (!fs.existsSync(RESULTS_DIR)) fs.mkdirSync(RESULTS_DIR);
