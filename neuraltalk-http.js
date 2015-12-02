@@ -157,7 +157,9 @@ function ntstandalone(foldername, filepath, callback) {
 
 function ntfolder(foldername, folderpath, callback) {
 
+	console.log(folderpath);
 	var filenames = fs.readdirSync(folderpath).filter(function(file) {
+		console.log(file);
 		return !fs.statSync(path.join(folderpath, file)).isDirectory();
 	});
 
@@ -173,7 +175,6 @@ function ntfolder(foldername, folderpath, callback) {
 }
 
 function autoorientimage(filepath, callback) {
-
 
 	var proc = spawn("convert", [filepath, '-auto-orient', filepath]);
 
@@ -286,7 +287,7 @@ app.post('/upload', multipartMiddleware, function(req, res) {
 				ntfolder(f, unzippath, function() {
 
 					res.status(200).send({ success: true });
-					
+
 				});
 
 			});
