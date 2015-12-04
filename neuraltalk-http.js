@@ -114,7 +114,11 @@ function runneuraltalk2(modelpath, imagepath, imagecount, imagesfiles, queuename
 
 	var proc = spawn("th", args, { cwd: NEURAL_TALK_2_DIR });
 
+	console.log('args: ' + args);
+
 	proc.stdout.on('data', function (data) {
+
+		console.log('data: ' + data);
 
 		var match = NEURAL_TALK_2_FILENAME_REGEX.exec(data);
 		if (match) {
