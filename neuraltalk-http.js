@@ -21,7 +21,10 @@ var fstream = require('fstream');
 var async = require('async');
 var uuid = require('uuid');
 
+var http = require('http');
+
 var PORT = 8080;
+var TRAIN_DIR = './train';
 var QUEUE_DIR = './queue';
 var RESULTS_DIR = './results';
 
@@ -33,6 +36,7 @@ var NEURAL_TALK_2_USE_GPU = false;
 var NEURAL_TALK_2_FILENAME_REGEX = /cp.*\/(.*)\".*\/img([0-9]*)\.jpg.*/gi;
 var NEURAL_TALK_2_RESUTL_REGEX = /image\s([0-9]*)\:\s([a-z ]*).*/gi;
 
+if (!fs.existsSync(TRAIN_DIR)) fs.mkdirSync(TRAIN_DIR);
 if (!fs.existsSync(QUEUE_DIR)) fs.mkdirSync(QUEUE_DIR);
 if (!fs.existsSync(RESULTS_DIR)) fs.mkdirSync(RESULTS_DIR);
 
@@ -49,6 +53,51 @@ var deletefolder = function(path) {
     fs.rmdirSync(path);
   }
 };
+
+function searchimages(query, callback) {
+
+	http.get({
+		
+		host: 'www.google.com.br',
+    	headers: {'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.73 Safari/537.36'},
+    	path: '/search?q=sheet+of+paper+over+desk&tbm=isch&gws_rd=ssl#'
+
+	}, function(res) {
+	    
+	    console.log("Got response: " + res.statusCode);
+
+	    var content = '';
+	    res.on('data', function(chunk) {
+	        content += chunk;
+	    });
+
+	    res.on('end', function() {
+	        console.log('end');
+	        console.log(content.length);
+
+	        var matches = content.match(/tbnid\=([^\&]+)/gi);
+
+	        if (matches) {
+		     
+	        	var tbnidoffset = "tbnid=".length;
+
+		        for (m = 0; m < matches.length; m++) {
+		        	var tbnid = matches[m].substr(tbnidoffset);
+		        	var regex = "\\[\\"" + tbnid.replace(/\-/g, '\\-').replace('/\:/g', '\\:') + "\"\,\"([a-z0-9]*\"\]";
+		        	console.log(regex);
+		        	var base64match = content.match(new RegExp(regex, "gi"));
+		        	
+		        }
+
+		    }
+
+	        if (callback) callback(null, []);
+
+	    });
+
+	});
+
+}
 
 function runneuraltalk2(modelpath, imagepath, imagecount, imagesfiles, queuename, usegpu, callback) {
 
@@ -301,6 +350,19 @@ app.set('views', __dirname + '/web/swig');
 
 app.use(session({ secret: 'ilovescotchscotchyscotchscotch' }));
 app.use(flash());
+
+app.get('/train', function(req, res) {
+
+	var s = req.query.s;
+
+	searchimages(s, function(err, images) {
+		if (err) console.log(err);
+
+		console.log(images);
+		res.status(200).send({ success: true });
+	})
+
+});
 
 app.get('/', function(req, res) {
 
