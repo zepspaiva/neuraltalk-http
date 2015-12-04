@@ -54,6 +54,7 @@ var deletefolder = function(path) {
   }
 };
 
+/*
 function searchimages(query, callback) {
 
 	http.get({
@@ -97,7 +98,7 @@ function searchimages(query, callback) {
 
 	});
 
-}
+}*/
 
 function runneuraltalk2(modelpath, imagepath, imagecount, imagesfiles, queuename, usegpu, callback) {
 
@@ -351,6 +352,7 @@ app.set('views', __dirname + '/web/swig');
 app.use(session({ secret: 'ilovescotchscotchyscotchscotch' }));
 app.use(flash());
 
+/*
 app.get('/train', function(req, res) {
 
 	var s = req.query.s;
@@ -362,7 +364,7 @@ app.get('/train', function(req, res) {
 		res.status(200).send({ success: true });
 	})
 
-});
+});*/
 
 app.get('/', function(req, res) {
 
